@@ -1,0 +1,8 @@
+[package]
+name = "riff-ui"
+version = "0.0.0"
+edition = "2024"
+description = "Rust UI component library built on GPUI"
+publish = false
+
+[dependencies]
