@@ -1,8 +1,16 @@
-[package]
-name = "riff-ui"
+[workspace]
+resolver = "3"
+members = ["crates/riff-ui", "crates/riff-story"]
+default-members = ["crates/riff-story"]
+
+[workspace.package]
 version = "0.0.0"
 edition = "2024"
-description = "Rust UI component library built on GPUI"
 publish = false
 
-[dependencies]
+[workspace.dependencies]
+riff-ui = { path = "crates/riff-ui" }
+
+# gpui-kit pins an exact gpui-pre snapshot per release, so pin it exactly too
+# and bump it deliberately together with Cargo.lock.
+gpui-kit = { version = "=0.10.0" }

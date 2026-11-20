@@ -1,0 +1,10 @@
+[package]
+name = "riff-story"
+description = "Component gallery for riff-ui"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+gpui-kit.workspace = true
+riff-ui.workspace = true
