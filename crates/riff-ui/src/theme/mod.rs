@@ -200,25 +200,26 @@ impl RiffTheme {
         let black = |alpha| hsla(0., 0., 0., alpha);
         let white = |alpha| hsla(0., 0., 1., alpha);
 
-        // `--riff-shadow-card` and `--riff-shadow-popover` from tokens.css.
+        // `--riff-shadow-card` and `--riff-shadow-popover` from tokens.css,
+        // in CSS units.
         let (shadow_card, shadow_popover) = if mode.is_dark() {
             (
-                vec![ring(white(0.1)), shadow(1., 2., 0., black(0.4))],
+                vec![ring(white(0.1)), css_shadow(1., 2., 0., black(0.4))],
                 vec![
                     ring(colors.border_strong),
-                    shadow(12., 32., -8., black(0.6)),
+                    css_shadow(12., 32., -8., black(0.6)),
                 ],
             )
         } else {
             (
                 vec![
                     ring(black(0.06)),
-                    shadow(1., 1., -1., black(0.1)),
-                    shadow(1., 2., 0., black(0.05)),
+                    css_shadow(1., 1., -1., black(0.1)),
+                    css_shadow(1., 2., 0., black(0.05)),
                 ],
                 vec![
                     ring(colors.border_strong),
-                    shadow(12., 32., -8., black(0.16)),
+                    css_shadow(12., 32., -8., black(0.16)),
                 ],
             )
         };
@@ -252,11 +253,17 @@ fn ring(color: Hsla) -> BoxShadow {
     }
 }
 
-fn shadow(y: f32, blur: f32, spread: f32, color: Hsla) -> BoxShadow {
+/// A CSS `box-shadow: 0 <y> <blur> <spread> <color>`, converted to GPUI.
+///
+/// CSS blurs with a Gaussian of standard deviation half the blur length.
+/// GPUI's shader takes `blur_radius` as the standard deviation itself, so the
+/// same number would blur twice as wide: it is halved here. Build every
+/// shadow from CSS values through this function.
+pub(crate) fn css_shadow(y: f32, blur: f32, spread: f32, color: Hsla) -> BoxShadow {
     BoxShadow {
         color,
         offset: point(px(0.), px(y)),
-        blur_radius: px(blur),
+        blur_radius: px(blur / 2.),
         spread_radius: px(spread),
         inset: false,
     }
@@ -391,6 +398,20 @@ mod tests {
         assert_close(light.focus, rgba(0., 96., 226., 0.7));
         assert_close(dark.focus, rgba(77., 141., 255., 0.8));
         assert_eq!(dark.overlay, dark.surface);
+    }
+
+    #[test]
+    fn shadows_convert_the_css_blur_to_a_standard_deviation() {
+        let shadow = css_shadow(12., 32., -8., rgba(0., 0., 0., 0.16));
+        assert_eq!(shadow.blur_radius, px(16.));
+        assert_eq!(shadow.offset.y, px(12.));
+        assert_eq!(shadow.spread_radius, px(-8.));
+
+        let light = RiffTheme::new(ThemeMode::Light);
+        assert_eq!(light.shadow_popover[1].blur_radius, px(16.));
+        assert_eq!(light.shadow_card[2].blur_radius, px(1.));
+        let dark = RiffTheme::new(ThemeMode::Dark);
+        assert_eq!(dark.shadow_card[1].blur_radius, px(1.));
     }
 
     #[test]

@@ -1,0 +1,73 @@
+{
+  "slug": "button",
+  "name": "Button",
+  "category": "Buttons",
+  "description": "Primary, secondary, ghost and destructive buttons with icons, sizes and a shimmering loading state",
+  "freeze_ms": 468,
+  "sections": [
+    {
+      "id": "variants",
+      "title": "Sizes and states",
+      "rows": [
+        {
+          "id": "primary",
+          "title": "primary",
+          "props": { "variant": "primary" },
+          "cells": "@matrix"
+        },
+        {
+          "id": "secondary",
+          "title": "secondary",
+          "props": { "variant": "secondary" },
+          "cells": "@matrix"
+        },
+        {
+          "id": "ghost",
+          "title": "ghost",
+          "props": { "variant": "ghost" },
+          "cells": "@matrix"
+        },
+        {
+          "id": "destructive",
+          "title": "destructive",
+          "props": { "variant": "destructive" },
+          "cells": "@matrix"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Icons",
+      "rows": [
+        {
+          "id": "icons",
+          "title": "icons",
+          "cells": [
+            { "id": "trash", "props": { "variant": "destructive", "icon": "trash", "label": "Delete" } },
+            { "id": "copy", "props": { "variant": "secondary", "icon": "copy", "label": "Copy link" } },
+            { "id": "chevron", "props": { "variant": "primary", "label": "More", "iconRight": "chevron-down" } },
+            { "id": "missing", "props": { "variant": "secondary", "icon": "no-such-icon", "label": "Icon" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "matrix": [
+      { "id": "sm", "props": { "size": "sm", "label": "Button" } },
+      { "id": "md", "props": { "label": "Button" } },
+      { "id": "lg", "props": { "size": "lg", "label": "Button" } },
+      { "id": "icon", "props": { "icon": "plus", "label": "Add" } },
+      { "id": "icon-right", "props": { "label": "Send", "iconRight": "arrow-up" } },
+      { "id": "only-sm", "props": { "size": "sm", "icon": "plus", "ariaLabel": "Add" } },
+      { "id": "only-md", "props": { "icon": "plus", "ariaLabel": "Add" } },
+      { "id": "only-lg", "props": { "size": "lg", "icon": "plus", "ariaLabel": "Add" } },
+      { "id": "hover", "state": "hover", "props": { "label": "Hover" } },
+      { "id": "pressed", "state": "active", "props": { "label": "Pressed" } },
+      { "id": "focus", "state": "focus", "props": { "label": "Focus" } },
+      { "id": "disabled", "props": { "label": "Disabled", "disabled": true } },
+      { "id": "loading", "props": { "icon": "plus", "label": "Request approval", "loading": true } },
+      { "id": "loading-icon", "props": { "icon": "plus", "loading": true, "ariaLabel": "Saving" } }
+    ]
+  }
+}
