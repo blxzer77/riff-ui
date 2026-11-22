@@ -28,6 +28,7 @@
 - 交付前跑：`cargo test --workspace`、`cargo clippy --workspace --all-targets`、`cargo fmt --all -- --check`、`python3 tools/reference/build.py --check`。
 - 交付亮色、暗色两张截图，说明对照了哪些规格、哪些地方没能还原、原因是什么；真实交互说明怎么验证的。
 - 只有用户明确说了，才提交和推送。
+- 直接提交到 `main` 并推送，不开 PR；本仓库没有 CI/CD。
 
 ## 环境与约束
 
