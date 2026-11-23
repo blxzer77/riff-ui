@@ -2,7 +2,7 @@
 
 基于 [GPUI](https://gpui.rs/) 的 Rust UI 组件库，供 [riff-studio](https://github.com/blxzer77/riff-studio) 的桌面端使用。
 
-目标是用 Rust 复现团队的 React 组件库 riff-uiux：行为复用 gpui-base，结构和样式自己写；跟 shadcn 风格接近的组件直接包装 gpui-component。复现进度见 [`docs/components.md`](docs/components.md)。
+目标是用 Rust 复现团队的 React 组件库 riff-uiux：行为复用 gpui-base，结构和样式自己写；跟 shadcn 风格接近的组件直接包装 gpui-component。复现进度见 [`docs/components.md`](docs/components.md)，后续规划见 [`docs/roadmap.md`](docs/roadmap.md)。
 
 ## 结构
 

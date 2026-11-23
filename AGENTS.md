@@ -1,6 +1,6 @@
 # riff-ui
 
-用 Rust 在 gpui-kit 上复现团队的 React 组件库 riff-uiux。只放组件库，不放应用代码。背景、结构和运行方式见 [`README.md`](README.md)，复现进度见 [`docs/components.md`](docs/components.md)。
+用 Rust 在 gpui-kit 上复现团队的 React 组件库 riff-uiux。只放组件库，不放应用代码。背景、结构和运行方式见 [`README.md`](README.md)，复现进度见 [`docs/components.md`](docs/components.md)，接下来做什么见 [`docs/roadmap.md`](docs/roadmap.md)（做完一个组件就更新它）。
 
 ## 原库
 
