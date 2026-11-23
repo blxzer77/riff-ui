@@ -30,6 +30,7 @@ Usage:
 import argparse
 import hashlib
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -47,7 +48,7 @@ BUILD = ROOT / "target/shots/reference"
 FONTS = ROOT / "crates/riff-ui/assets/fonts"
 FONT_FILES = ["Inter-Regular.ttf", "Inter-Medium.ttf"]
 
-RIFF = pathlib.Path("/home/yuki/Downloads/riff-uiux")
+RIFF = pathlib.Path(os.environ.get("RIFF_UIUX_DIR", "/root/Projects/personal/affectui/riff-uiux"))
 RIFF_COMPONENTS = RIFF / "dist/components"
 RIFF_TOKENS = RIFF / "src/styles/tokens.css"
 RIFF_NODE_MODULES = RIFF / "node_modules"

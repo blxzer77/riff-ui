@@ -4,7 +4,7 @@
 
 ## 原库
 
-- 位置：`/home/yuki/Downloads/riff-uiux`，团队内部代码，只读、只作参考：不复制进本仓库，不提交、不推到任何远程，不把大段源码贴到外部服务。
+- 位置：`/root/Projects/personal/affectui/riff-uiux`（可用环境变量 `RIFF_UIUX_DIR` 覆盖），团队内部代码，只读、只作参考：不复制进本仓库，不提交、不推到任何远程，不把大段源码贴到外部服务。
 - 可以当规格的：`docs/<slug>.md`、`src/components/<slug>.tsx` 里的 CSS、`src/styles/tokens.css`、`docs/tokens.report.md`。
 - 不能当规格的：`src/internal/core.tsx`，以及还残留 `X$1` 这类压缩名的屏幕级组件。
 - 一切以原库的 API、行为和视觉为准，不照搬 shadcn，也不自己发挥。GPUI 做不到、需要取舍的视觉问题，先列方案问用户，不擅自降级。
