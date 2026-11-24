@@ -23,13 +23,13 @@
 
 每一阶段先做的那个组件会定下这一类的写法，后面照着做。
 
-### 阶段 1：小件（9 个）
+### 阶段 1：小件（9 个，已完成）
 
 把 button 定下的写法推广到更多组件，风险低，也是后面各阶段都会用到的部件。
 
-~~`icon-button`~~（已完成）、~~`badge`~~（已完成）、~~`kbd`~~（已完成）、~~`separator`~~（已完成）、~~`spinner`~~（已完成）、~~`skeleton`~~（已完成）、~~`avatar`~~（已完成）、~~`card`~~（已完成）、`gradient-text`
+~~`icon-button`~~（已完成）、~~`badge`~~（已完成）、~~`kbd`~~（已完成）、~~`separator`~~（已完成）、~~`spinner`~~（已完成）、~~`skeleton`~~（已完成）、~~`avatar`~~（已完成）、~~`card`~~（已完成）、~~`gradient-text`~~（已完成）
 
-- 阶段 1 还剩 `gradient-text`。
+- 阶段 1 的 9 个组件已全部完成；下一阶段进入阶段 2（先做 `tooltip`，做完后回头补 button 截断悬浮提示和替换 `icon_button` 的临时 tooltip）。
 
 ### 阶段 2：浮层（7 个）
 

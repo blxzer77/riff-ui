@@ -5946,6 +5946,9 @@ name = "riff-ui"
 version = "0.0.0"
 dependencies = [
  "gpui-kit",
+ "image",
+ "smallvec",
+ "swash",
  "unicode-segmentation",
 ]
 

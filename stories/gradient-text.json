@@ -1,0 +1,142 @@
+{
+  "slug": "gradient-text",
+  "name": "Gradient Text",
+  "category": "Text",
+  "description": "Letters clipped from a flowing multi-blob gradient with a one-time left-to-right sweep",
+  "freeze_ms": 2000,
+  "sections": [
+    {
+      "id": "scales",
+      "title": "Sizes & elements",
+      "rows": [
+        {
+          "id": "sizes",
+          "title": "sizes",
+          "cells": [
+            {
+              "id": "inline",
+              "props": {
+                "text": "Highlight",
+                "fontSize": 14,
+                "fontWeight": 500,
+                "lineHeight": 20
+              }
+            },
+            {
+              "id": "brand",
+              "props": {
+                "text": "riff-ui",
+                "fontSize": 24,
+                "fontWeight": 500,
+                "lineHeight": 29
+              }
+            },
+            {
+              "id": "hero",
+              "props": {
+                "text": "feel.",
+                "fontSize": 32,
+                "fontWeight": 500,
+                "lineHeight": 38
+              }
+            },
+            {
+              "id": "heading-h1",
+              "props": {
+                "text": "Ship faster.",
+                "as": "h1",
+                "fontSize": 28,
+                "fontWeight": 500,
+                "lineHeight": 34
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "palettes",
+      "title": "Custom colors",
+      "rows": [
+        {
+          "id": "colors",
+          "title": "colors",
+          "props": { "fontSize": 24, "fontWeight": 500, "lineHeight": 29 },
+          "cells": [
+            {
+              "id": "ocean",
+              "props": {
+                "text": "Ocean",
+                "colors": ["#0284c7", "#14b3a0", "#38bdf8", "#5fc88a"]
+              }
+            },
+            {
+              "id": "sunset",
+              "props": {
+                "text": "Sunset",
+                "colors": ["#ea580c", "#dd0674", "#fb923c", "#f472b6"]
+              }
+            },
+            {
+              "id": "two-colors",
+              "props": {
+                "text": "Duo",
+                "colors": ["#0070d6", "#a651f0"]
+              }
+            },
+            {
+              "id": "one-color",
+              "props": {
+                "text": "Mono",
+                "colors": ["#1e8a4f"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "behavior",
+      "title": "Speed, sweep & inline",
+      "rows": [
+        {
+          "id": "motion",
+          "title": "motion",
+          "props": { "fontSize": 24, "fontWeight": 500, "lineHeight": 29 },
+          "cells": [
+            {
+              "id": "speed-8",
+              "props": {
+                "text": "Flow 8s",
+                "speed": 8
+              }
+            },
+            {
+              "id": "speed-4",
+              "props": {
+                "text": "Flow 4s",
+                "speed": 4
+              }
+            },
+            {
+              "id": "no-sweep",
+              "props": {
+                "text": "Instant",
+                "sweep": false
+              }
+            },
+            {
+              "id": "in-sentence",
+              "props": {
+                "prefix": "Interfaces people actually ",
+                "text": "feel.",
+                "fontSize": 20,
+                "lineHeight": 28
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,9 @@ publish.workspace = true
 
 [dependencies]
 gpui-kit.workspace = true
+image = { version = "0.25.10", default-features = false }
+smallvec = "1.16.6"
+swash = "0.2.10"
 unicode-segmentation = "1.13.3"
 
 [dev-dependencies]
