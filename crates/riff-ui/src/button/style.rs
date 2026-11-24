@@ -1,8 +1,9 @@
 //! Sizes and colors of riff-uiux's `.ui-button`, one field per CSS variable.
 
-use gpui_kit::{BoxShadow, Hsla, Pixels, Rgba, px};
+use gpui_kit::{BoxShadow, Hsla, Pixels, px};
 
 use super::{ButtonSize, ButtonVariant};
+use crate::paint::{Fill, hex, mix, rgba};
 use crate::theme::{RiffTheme, css_shadow};
 
 /// `--h`, `--px`, `--gap`, `--fs`, `--icon` and `--radius` of one size.
@@ -37,19 +38,6 @@ impl Metrics {
             radius,
         }
     }
-}
-
-/// How a variant paints its box.
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub(super) enum Fill {
-    Solid(Hsla),
-    /// primary: a top-to-bottom gradient inside the border, over a three-stop
-    /// gradient filling the border box (which shows through the 1px border).
-    Gradient {
-        top: Hsla,
-        bottom: Hsla,
-        edge: [Hsla; 3],
-    },
 }
 
 /// The resolved look of one variant in one mode.
@@ -236,39 +224,6 @@ impl Palette {
     }
 }
 
-fn hex(value: u32) -> Hsla {
-    gpui_kit::rgb(value).into()
-}
-
-fn rgba(r: u8, g: u8, b: u8, a: f32) -> Hsla {
-    Rgba {
-        r: f32::from(r) / 255.,
-        g: f32::from(g) / 255.,
-        b: f32::from(b) / 255.,
-        a,
-    }
-    .into()
-}
-
-/// `color-mix(in srgb, a (1 - t), b t)`, which like CSS transitions mixes
-/// premultiplied channels: fading out of `transparent` keeps the hue instead
-/// of passing through black.
-pub(super) fn mix(a: Hsla, b: Hsla, t: f32) -> Hsla {
-    let (a, b) = (a.to_rgb(), b.to_rgb());
-    let alpha = a.a + (b.a - a.a) * t;
-    if alpha <= 0. {
-        return Hsla::transparent_black();
-    }
-    let channel = |x: f32, y: f32| ((x * a.a) + (y * b.a - x * a.a) * t) / alpha;
-    Rgba {
-        r: channel(a.r, b.r),
-        g: channel(a.g, b.g),
-        b: channel(a.b, b.b),
-        a: alpha,
-    }
-    .into()
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -282,15 +237,6 @@ mod tests {
             && (actual.2 - expected.2).abs() < 0.6
             && (actual.3 - expected.3).abs() < 0.002;
         assert!(close, "{actual:?} != {expected:?}");
-    }
-
-    #[test]
-    fn mixing_with_transparent_keeps_the_color() {
-        let red = rgba(255, 107, 95, 1.);
-        assert_rgba(
-            mix(Hsla::transparent_black(), red, 0.16),
-            (255., 107., 95., 0.16),
-        );
     }
 
     #[test]

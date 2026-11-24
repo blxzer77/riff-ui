@@ -1,0 +1,97 @@
+{
+  "slug": "badge",
+  "name": "Badge",
+  "category": "Data display",
+  "description": "Small status pill in six soft tones, with a leading dot or icon, a pulsing live dot, or a round count up to 99+",
+  "freeze_ms": 360,
+  "sections": [
+    {
+      "id": "tones",
+      "title": "Tones and sizes",
+      "rows": [
+        {
+          "id": "sm",
+          "title": "sm",
+          "props": { "size": "sm" },
+          "cells": "@tones"
+        },
+        {
+          "id": "md",
+          "title": "md",
+          "props": { "size": "md" },
+          "cells": "@tones"
+        }
+      ]
+    },
+    {
+      "id": "leads",
+      "title": "Dots, live and icons",
+      "rows": [
+        {
+          "id": "dot",
+          "title": "dot",
+          "props": { "dot": true },
+          "cells": "@tones"
+        },
+        {
+          "id": "live",
+          "title": "live",
+          "props": { "live": true },
+          "cells": "@tones"
+        },
+        {
+          "id": "icon",
+          "title": "icon",
+          "cells": [
+            { "id": "scheduled", "props": { "tone": "neutral", "icon": "clock", "label": "Scheduled" } },
+            { "id": "running", "props": { "tone": "info", "icon": "play", "label": "Running" } },
+            { "id": "verified", "props": { "tone": "success", "icon": "check", "label": "Verified" } },
+            { "id": "slow", "props": { "tone": "warning", "icon": "triangle-alert", "label": "Slow" } },
+            { "id": "blocked", "props": { "tone": "danger", "icon": "x", "label": "Blocked" } },
+            { "id": "md", "props": { "tone": "purple", "size": "md", "icon": "sparkles", "label": "Pro" } },
+            { "id": "missing", "props": { "tone": "neutral", "icon": "no-such-icon", "label": "Fallback" } },
+            { "id": "icon-only", "props": { "tone": "info", "icon": "clock" } },
+            { "id": "dot-only", "props": { "tone": "success", "dot": true } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "counts",
+      "title": "Counts",
+      "rows": [
+        {
+          "id": "sm",
+          "title": "sm",
+          "props": { "size": "sm" },
+          "cells": "@counts"
+        },
+        {
+          "id": "md",
+          "title": "md",
+          "props": { "size": "md" },
+          "cells": "@counts"
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "tones": [
+      { "id": "neutral", "props": { "tone": "neutral", "label": "Queued" } },
+      { "id": "info", "props": { "tone": "info", "label": "Running" } },
+      { "id": "success", "props": { "tone": "success", "label": "Done" } },
+      { "id": "warning", "props": { "tone": "warning", "label": "Needs you" } },
+      { "id": "danger", "props": { "tone": "danger", "label": "Failed" } },
+      { "id": "purple", "props": { "tone": "purple", "label": "Beta" } }
+    ],
+    "counts": [
+      { "id": "zero", "props": { "tone": "neutral", "count": 0 } },
+      { "id": "single", "props": { "tone": "info", "count": 3 } },
+      { "id": "double", "props": { "tone": "success", "count": 42 } },
+      { "id": "edge", "props": { "tone": "warning", "count": 99 } },
+      { "id": "overflow", "props": { "tone": "danger", "count": 128 } },
+      { "id": "custom-max", "props": { "tone": "purple", "count": 1200, "max": 999 } },
+      { "id": "negative", "props": { "tone": "neutral", "count": -5 } }
+    ]
+  }
+}

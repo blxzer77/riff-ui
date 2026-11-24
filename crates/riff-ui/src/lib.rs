@@ -1,6 +1,9 @@
 //! riff-ui: a UI component library built on GPUI.
 
+pub mod badge;
 pub mod button;
+pub mod icon_button;
+pub(crate) mod paint;
 pub mod theme;
 
 use std::borrow::Cow;

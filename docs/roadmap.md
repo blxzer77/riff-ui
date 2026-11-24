@@ -27,9 +27,9 @@
 
 把 button 定下的写法推广到更多组件，风险低，也是后面各阶段都会用到的部件。
 
-`icon-button`、`badge`、`kbd`、`separator`、`spinner`、`skeleton`、`avatar`、`card`、`gradient-text`
+~~`icon-button`~~（已完成）、~~`badge`~~（已完成）、`kbd`、`separator`、`spinner`、`skeleton`、`avatar`、`card`、`gradient-text`
 
-- `icon-button` 和 button 共用尺寸与状态，最先做。
+- `icon-button`、`badge` 已完成；下一个做 `kbd`（顺带处理等宽字体 `--riff-font-mono`）。
 - `card` 用到 `--riff-shadow-card`，顺带查清上面的阴影遗留。
 - gpui-base 有 `avatar` 的行为。
 

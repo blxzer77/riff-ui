@@ -188,6 +188,10 @@ impl Props {
         self.0.get(key).and_then(Value::as_bool).unwrap_or(false)
     }
 
+    pub fn i64(&self, key: &str) -> Option<i64> {
+        self.0.get(key).and_then(Value::as_i64)
+    }
+
     /// Every key, so a component can reject props it does not understand
     /// instead of silently drawing something else.
     pub fn keys(&self) -> impl Iterator<Item = &str> {

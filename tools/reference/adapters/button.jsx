@@ -21,8 +21,8 @@ export default function cell({ label, icon, iconRight, ariaLabel, ...props }) {
   return (
     <Button
       {...props}
-      icon={icon ? <Icon name={icon} /> : undefined}
-      iconRight={iconRight ? <Icon name={iconRight} /> : undefined}
+      icon={icon ? <Icon name={icon} size="100%" /> : undefined}
+      iconRight={iconRight ? <Icon name={iconRight} size="100%" /> : undefined}
       aria-label={ariaLabel}
     >
       {label}

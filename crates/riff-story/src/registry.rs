@@ -54,7 +54,11 @@ macro_rules! entry {
 }
 
 pub fn entries() -> Vec<Entry> {
-    vec![entry!("button", button)]
+    vec![
+        entry!("badge", badge),
+        entry!("button", button),
+        entry!("icon-button", icon_button),
+    ]
 }
 
 pub fn pages() -> Vec<Page> {

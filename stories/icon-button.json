@@ -1,0 +1,63 @@
+{
+  "slug": "icon-button",
+  "name": "Icon Button",
+  "category": "Buttons",
+  "description": "Square button with only an icon — ghost, secondary or primary, two sizes, a toggle pressed state and its label as the tooltip",
+  "sections": [
+    {
+      "id": "variants",
+      "title": "Variants, sizes and states",
+      "rows": [
+        {
+          "id": "ghost",
+          "title": "ghost",
+          "props": { "variant": "ghost" },
+          "cells": "@matrix"
+        },
+        {
+          "id": "secondary",
+          "title": "secondary",
+          "props": { "variant": "secondary" },
+          "cells": "@matrix"
+        },
+        {
+          "id": "primary",
+          "title": "primary",
+          "props": { "variant": "primary" },
+          "cells": "@matrix"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Icons",
+      "rows": [
+        {
+          "id": "icons",
+          "title": "icons",
+          "cells": [
+            { "id": "search", "props": { "variant": "ghost", "icon": "search", "label": "Search" } },
+            { "id": "copy", "props": { "variant": "secondary", "icon": "copy", "label": "Copy" } },
+            { "id": "trash", "props": { "variant": "ghost", "icon": "trash", "label": "Delete" } },
+            { "id": "settings", "props": { "variant": "primary", "icon": "settings", "label": "Settings" } },
+            { "id": "missing", "props": { "variant": "secondary", "icon": "no-such-icon", "label": "Missing" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "matrix": [
+      { "id": "sm", "props": { "size": "sm", "icon": "plus", "label": "Add" } },
+      { "id": "md", "props": { "icon": "plus", "label": "Add" } },
+      { "id": "hover", "state": "hover", "props": { "icon": "plus", "label": "Hover" } },
+      { "id": "pressed", "state": "active", "props": { "icon": "plus", "label": "Pressed" } },
+      { "id": "focus", "state": "focus", "props": { "icon": "plus", "label": "Focus" } },
+      { "id": "disabled", "props": { "icon": "plus", "label": "Disabled", "disabled": true } },
+      { "id": "toggled-off", "props": { "icon": "pin", "label": "Pin", "pressed": false } },
+      { "id": "toggled-on", "props": { "icon": "pin", "label": "Pin", "pressed": true } },
+      { "id": "toggled-hover", "state": "hover", "props": { "icon": "pin", "label": "Pin", "pressed": true } },
+      { "id": "toggled-disabled", "props": { "icon": "pin", "label": "Pin", "pressed": true, "disabled": true } }
+    ]
+  }
+}

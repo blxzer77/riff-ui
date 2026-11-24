@@ -5,10 +5,9 @@
 //! [`base::Button`]: activation, focus, Enter/Space, disabled, accessibility)
 //! and this module supplies everything visible. The button paints itself
 //! because it scales to 97% while pressed, and GPUI transforms only glyphs and
-//! SVGs, not boxes: see [`paint`].
+//! SVGs, not boxes: see [`crate::paint`].
 
 mod a11y;
-mod paint;
 mod state;
 mod style;
 #[cfg(test)]
@@ -25,11 +24,11 @@ use gpui_kit::{
     size,
 };
 
+use crate::paint::{self, Scale, Tap, lerp_fill, mix};
 use crate::theme::RiffTheme;
-use paint::{Scale, Tap};
 pub use state::ButtonState;
 use state::{ICON, ICON_RIGHT, LABEL, Shared};
-use style::{BORDER, Fill, Look, Metrics, mix};
+use style::{BORDER, Look, Metrics};
 
 /// `variant`: what the button looks like.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Hash)]
@@ -57,7 +56,7 @@ pub enum ButtonSize {
 /// An icon: an SVG path in the application's asset source, such as a
 /// [`gpui_kit::assets::IconName`].
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct ButtonIcon(SharedString);
+pub struct ButtonIcon(pub(crate) SharedString);
 
 impl<T: gpui_kit::assets::IconNamed> From<T> for ButtonIcon {
     fn from(icon: T) -> Self {
@@ -542,6 +541,7 @@ impl Painter {
         paint::paint_box(
             bounds,
             m.radius,
+            BORDER,
             fill,
             look.border,
             &look.shadows,
@@ -721,24 +721,5 @@ impl Painter {
                 window,
             );
         }
-    }
-}
-
-fn lerp_fill(from: Fill, to: Fill, t: f32) -> Fill {
-    match (from, to) {
-        (Fill::Solid(a), Fill::Solid(b)) => Fill::Solid(mix(a, b, t)),
-        (
-            Fill::Gradient { top, bottom, edge },
-            Fill::Gradient {
-                top: top_to,
-                bottom: bottom_to,
-                ..
-            },
-        ) => Fill::Gradient {
-            top: mix(top, top_to, t),
-            bottom: mix(bottom, bottom_to, t),
-            edge,
-        },
-        (from, _) => from,
     }
 }

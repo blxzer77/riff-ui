@@ -1,12 +1,12 @@
-//! Painting the button with a CSS `transform: scale()` applied.
+//! Shared painting, color, and CSS-scale helpers for riff-ui controls.
 //!
-//! GPUI quads carry no transformation, so a scaled button is painted rather
-//! than laid out: every box is scaled about the button's center, glyphs are
+//! GPUI quads carry no transformation, so a scaled control is painted rather
+//! than laid out: every box is scaled about the control's center, glyphs are
 //! painted at the scaled font size and positions, and icons go through the
 //! SVG transformation matrix.
 //!
 //! At scale 1 the box is quads and shadows, which GPUI snaps to whole
-//! pixels; the button's edges are on whole pixels then, as in a browser.
+//! pixels; the control's edges are on whole pixels then, as in a browser.
 //! Scaled (pressed), its edges fall between pixels, and the box is drawn as
 //! antialiased paths instead (`paint_box_scaled`).
 
@@ -14,15 +14,78 @@ use std::f32::consts::PI;
 
 use gpui_kit::{
     App, Background, BorderStyle, Bounds, BoxShadow, ContentMask, Corners, Edges, Hsla,
-    PathBuilder, Pixels, Point, Radians, ShapedLine, SharedString, Size, TransformationMatrix,
-    Window, linear_color_stop, linear_gradient, point, px, quad, size,
+    PathBuilder, Pixels, Point, Radians, Rgba, ShapedLine, SharedString, Size,
+    TransformationMatrix, Window, linear_color_stop, linear_gradient, point, px, quad, size,
 };
 
-use super::style::Fill;
+/// How a control variant paints its box.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub(crate) enum Fill {
+    Solid(Hsla),
+    /// A top-to-bottom gradient inside the border, over a three-stop
+    /// gradient filling the border box (which shows through the 1px border).
+    Gradient {
+        top: Hsla,
+        bottom: Hsla,
+        edge: [Hsla; 3],
+    },
+}
+
+pub(crate) fn lerp_fill(from: Fill, to: Fill, t: f32) -> Fill {
+    match (from, to) {
+        (Fill::Solid(a), Fill::Solid(b)) => Fill::Solid(mix(a, b, t)),
+        (
+            Fill::Gradient { top, bottom, edge },
+            Fill::Gradient {
+                top: top_to,
+                bottom: bottom_to,
+                ..
+            },
+        ) => Fill::Gradient {
+            top: mix(top, top_to, t),
+            bottom: mix(bottom, bottom_to, t),
+            edge,
+        },
+        (from, _) => from,
+    }
+}
+
+pub(crate) fn hex(value: u32) -> Hsla {
+    gpui_kit::rgb(value).into()
+}
+
+pub(crate) fn rgba(r: u8, g: u8, b: u8, a: f32) -> Hsla {
+    Rgba {
+        r: f32::from(r) / 255.,
+        g: f32::from(g) / 255.,
+        b: f32::from(b) / 255.,
+        a,
+    }
+    .into()
+}
+
+/// `color-mix(in srgb, a (1 - t), b t)`, which like CSS transitions mixes
+/// premultiplied channels: fading out of `transparent` keeps the hue instead
+/// of passing through black.
+pub(crate) fn mix(a: Hsla, b: Hsla, t: f32) -> Hsla {
+    let (a, b) = (a.to_rgb(), b.to_rgb());
+    let alpha = a.a + (b.a - a.a) * t;
+    if alpha <= 0. {
+        return Hsla::transparent_black();
+    }
+    let channel = |x: f32, y: f32| ((x * a.a) + (y * b.a - x * a.a) * t) / alpha;
+    Rgba {
+        r: channel(a.r, b.r),
+        g: channel(a.g, b.g),
+        b: channel(a.b, b.b),
+        a: alpha,
+    }
+    .into()
+}
 
 /// A uniform scale about a fixed center, in window coordinates.
 #[derive(Clone, Copy, Debug)]
-pub(super) struct Scale {
+pub(crate) struct Scale {
     pub center: Point<Pixels>,
     pub factor: f32,
 }
@@ -38,7 +101,7 @@ impl Scale {
 
     /// A font size under this scale. Glyphs are rasterized and cached per
     /// size and never evicted, so the factor is rounded to steps of 0.005:
-    /// the press transition then uses seven sizes instead of one per frame.
+    /// the press transition then uses a handful of sizes instead of one per frame.
     pub fn font_size(&self, size: Pixels) -> Pixels {
         size * ((self.factor * 200.).round() / 200.)
     }
@@ -51,12 +114,13 @@ impl Scale {
     }
 }
 
-/// Paints the drop shadows, fill and border of the button box. `faded`: the
-/// button is painted with an opacity below 1.
+/// Paints the drop shadows, fill and border of a control box. `faded`: the
+/// control is painted with an opacity below 1.
 #[allow(clippy::too_many_arguments)]
-pub(super) fn paint_box(
+pub(crate) fn paint_box(
     bounds: Bounds<Pixels>,
     radius: Pixels,
+    border_width: Pixels,
     fill: Fill,
     border: Hsla,
     shadows: &[BoxShadow],
@@ -66,6 +130,7 @@ pub(super) fn paint_box(
 ) {
     let outer = scale.bounds(bounds);
     let r = scale.len(radius);
+    let scaled_border = scale.len(border_width);
     let shadows: Vec<_> = shadows
         .iter()
         .map(|s| BoxShadow {
@@ -78,8 +143,7 @@ pub(super) fn paint_box(
     if scale.factor != 1. {
         // Scaled (pressed), the box's edges fall between pixels. Quads and
         // shadows snap to whole pixels; paths do not, and are antialiased.
-        let border_width = scale.len(super::style::BORDER);
-        paint_box_scaled(outer, r, border_width, fill, border, &shadows, window);
+        paint_box_scaled(outer, r, scaled_border, fill, border, &shadows, window);
         return;
     }
     if faded {
@@ -90,13 +154,12 @@ pub(super) fn paint_box(
         drop_shadows(outer, r, &shadows, window);
     }
 
-    let border_width = scale.len(super::style::BORDER);
     match fill {
         Fill::Solid(color) => window.paint_quad(quad(
             outer,
             Corners::all(r),
             color,
-            Edges::all(border_width),
+            Edges::all(scaled_border),
             border,
             BorderStyle::Solid,
         )),
@@ -116,7 +179,7 @@ pub(super) fn paint_box(
             //
             // The fill gradient spans the padding box, 1px in from the top
             // and bottom of the quad: its stops are placed there.
-            let inset = border_width / outer.size.height;
+            let inset = scaled_border / outer.size.height;
             let fill = linear_gradient(
                 180.,
                 linear_color_stop(top, inset),
@@ -128,9 +191,9 @@ pub(super) fn paint_box(
                 let middle = (row_top + row_bottom) / 2.;
                 let t = ((middle - outer.top()) / outer.size.height).clamp(0., 1.);
                 let color = if t < 0.5 {
-                    super::style::mix(edge[0], edge[1], t * 2.)
+                    mix(edge[0], edge[1], t * 2.)
                 } else {
-                    super::style::mix(edge[1], edge[2], t * 2. - 1.)
+                    mix(edge[1], edge[2], t * 2. - 1.)
                 };
                 let band = ContentMask {
                     bounds: Bounds::from_corners(
@@ -153,7 +216,7 @@ pub(super) fn paint_box(
                         outer,
                         Corners::all(r),
                         background,
-                        Edges::all(border_width),
+                        Edges::all(scaled_border),
                         color,
                         BorderStyle::Solid,
                     ));
@@ -164,12 +227,12 @@ pub(super) fn paint_box(
                 // the outer radius less the border width, as CSS does. It
                 // meets the border's inner edge without overlapping it.
                 let inner = Bounds::new(
-                    outer.origin + point(border_width, border_width),
-                    outer.size - size(border_width * 2., border_width * 2.),
+                    outer.origin + point(scaled_border, scaled_border),
+                    outer.size - size(scaled_border * 2., scaled_border * 2.),
                 );
                 window.paint_quad(quad(
                     inner,
-                    Corners::all((r - border_width).max(px(0.))),
+                    Corners::all((r - scaled_border).max(px(0.))),
                     linear_gradient(
                         180.,
                         linear_color_stop(top, 0.),
@@ -194,9 +257,6 @@ pub(super) fn paint_box(
 ///   and `r - border`), filled with the border color or, for primary, the
 ///   edge gradient in two halves (GPUI gradients have two stops);
 /// - the fill is the padding box for a gradient, the whole box for a solid.
-///
-/// Only a pressed button is scaled, so this costs a few paths per frame for
-/// 160ms; at rest the cheaper snapped quads are used.
 fn paint_box_scaled(
     outer: Bounds<Pixels>,
     r: Pixels,
@@ -222,7 +282,9 @@ fn paint_box_scaled(
     let inner_r = (r - border_width).max(px(0.));
     match fill {
         Fill::Solid(color) => {
-            paint_rounded(outer, r, color, window);
+            if color.a > 0. {
+                paint_rounded(outer, r, color, window);
+            }
             if border.a > 0. {
                 paint_band(outer, r, inner, inner_r, border, window);
             }
@@ -289,13 +351,32 @@ fn add_rounded(builder: &mut PathBuilder, b: Bounds<Pixels>, r: Pixels) {
     builder.close();
 }
 
-fn paint_rounded(b: Bounds<Pixels>, r: Pixels, color: impl Into<Background>, window: &mut Window) {
+pub(crate) fn paint_rounded(
+    b: Bounds<Pixels>,
+    r: Pixels,
+    color: impl Into<Background>,
+    window: &mut Window,
+) {
     let mut builder = PathBuilder::fill();
     add_rounded(&mut builder, b, r);
     if let Ok(mut path) = builder.build() {
         path.bounds = fringe(path.bounds);
         window.paint_path(path, color);
     }
+}
+
+/// Paints an antialiased filled circle at fractional center/radius.
+pub(crate) fn paint_circle(
+    center: Point<Pixels>,
+    radius: Pixels,
+    color: Hsla,
+    window: &mut Window,
+) {
+    if radius <= px(0.) || color.a <= 0. {
+        return;
+    }
+    let bounds = Bounds::centered_at(center, size(radius * 2., radius * 2.));
+    paint_rounded(bounds, radius, color, window);
 }
 
 /// Grows a path's bounds by a pixel so its antialiased fringe is drawn.
@@ -377,7 +458,22 @@ fn paint_outer_shadows(
     if shadows.is_empty() {
         return;
     }
-    let reach = shadows
+    let mut blurred = Vec::new();
+    for shadow in shadows {
+        let solid_ring = shadow.blur_radius == px(0.)
+            && shadow.offset == Point::default()
+            && shadow.spread_radius > px(0.);
+        if solid_ring {
+            let s = shadow.spread_radius;
+            paint_band(outer.dilate(s), r + s, outer, r, shadow.color, window);
+        } else {
+            blurred.push(shadow.clone());
+        }
+    }
+    if blurred.is_empty() {
+        return;
+    }
+    let reach = blurred
         .iter()
         .map(|s| s.blur_radius * 3. + s.spread_radius.max(px(0.)) + s.offset.y.abs())
         .fold(px(0.), Pixels::max)
@@ -393,39 +489,39 @@ fn paint_outer_shadows(
         Bounds::from_corners(point(area.left(), box_bottom), area.bottom_right()),
     ] {
         window.with_content_mask(Some(ContentMask { bounds: band }), |window| {
-            drop_shadows(outer, r, shadows, window);
+            drop_shadows(outer, r, &blurred, window);
         });
     }
     // Beside the box: per device row, left and right of its rounded span.
-    // The span is rounded inwards so the antialiased box edge keeps the
-    // shadow under it, as in CSS.
+    // The span uses the row's widest extent (smallest corner inset) so the
+    // shadow never leaks inside the translucent box.
     for (top, bottom) in device_rows(outer.top(), outer.bottom(), sf) {
         let inset = corner_inset(outer, r, top, bottom);
         for band in [
             Bounds::from_corners(
                 point(area.left(), top),
-                point(snap_up(outer.left() + inset), bottom),
+                point(snap_down(outer.left() + inset), bottom),
             ),
             Bounds::from_corners(
-                point(snap_down(outer.right() - inset), top),
+                point(snap_up(outer.right() - inset), top),
                 point(area.right(), bottom),
             ),
         ] {
             window.with_content_mask(Some(ContentMask { bounds: band }), |window| {
-                drop_shadows(outer, r, shadows, window);
+                drop_shadows(outer, r, &blurred, window);
             });
         }
     }
 }
 
 /// How far in from the side the rounded box's edge is, at its widest within
-/// the rows `top..bottom`: the part of the row the box fully covers starts
-/// there.
+/// the rows `top..bottom`: the shadow stays strictly outside this span.
 fn corner_inset(outer: Bounds<Pixels>, r: Pixels, top: Pixels, bottom: Pixels) -> Pixels {
     let r = r.as_f32();
-    // Distance into the corner arc's vertical extent, worst case of the row.
-    let dy_top = (outer.top().as_f32() + r) - top.as_f32();
-    let dy_bottom = bottom.as_f32() - (outer.bottom().as_f32() - r);
+    // Distance into the corner arc's vertical extent at the row edge closer
+    // to the vertical center, where the box is widest (smallest inset).
+    let dy_top = (outer.top().as_f32() + r) - bottom.as_f32();
+    let dy_bottom = top.as_f32() - (outer.bottom().as_f32() - r);
     let dy = dy_top.max(dy_bottom);
     if dy <= 0. {
         return px(0.);
@@ -453,7 +549,7 @@ fn device_rows(
 }
 
 /// `outline: 2px solid; outline-offset: 2px` around the scaled box.
-pub(super) fn paint_focus_ring(
+pub(crate) fn paint_focus_ring(
     bounds: Bounds<Pixels>,
     radius: Pixels,
     color: Hsla,
@@ -478,7 +574,7 @@ pub(super) fn paint_focus_ring(
 
 /// One layer of a blur approximation: an offset and its weight.
 #[derive(Clone, Copy, Debug)]
-pub(super) struct Tap {
+pub(crate) struct Tap {
     pub offset: Point<Pixels>,
     pub weight: f32,
 }
@@ -488,7 +584,7 @@ pub(super) struct Tap {
 ///
 /// The kernel is sampled on a polar grid (a center plus rings) and its
 /// weights normalized, so the layers add up to the unblurred coverage.
-pub(super) fn blur_taps(sigma: Pixels) -> Vec<Tap> {
+pub(crate) fn blur_taps(sigma: Pixels) -> Vec<Tap> {
     let s = sigma.as_f32();
     if s < 0.05 {
         return vec![Tap {
@@ -532,7 +628,7 @@ pub(super) fn blur_taps(sigma: Pixels) -> Vec<Tap> {
 /// GPUI blends with `over`, not additively, so this is what keeps a blurred
 /// glyph's interior at full strength. Partly covered pixels come out a little
 /// stronger than a true convolution would make them.
-pub(super) fn layer_alpha(target: f32, weight: f32) -> f32 {
+pub(crate) fn layer_alpha(target: f32, weight: f32) -> f32 {
     if weight >= 1. {
         return target;
     }
@@ -543,19 +639,19 @@ pub(super) fn layer_alpha(target: f32, weight: f32) -> f32 {
 
 /// `letter-spacing: -0.01em` of button.tsx. GPUI has no letter spacing, and
 /// riff-ui paints every glyph itself, so the offset is applied here.
-pub(super) fn tracking(font_size: Pixels) -> Pixels {
+pub(crate) fn tracking(font_size: Pixels) -> Pixels {
     font_size * -0.01
 }
 
 /// The distance a glyph shifts under [`tracking`]: each character carries the
 /// spacing after it.
-pub(super) fn tracked_offset(font_size: Pixels, glyph_index: usize) -> Pixels {
+pub(crate) fn tracked_offset(font_size: Pixels, glyph_index: usize) -> Pixels {
     tracking(font_size) * glyph_index as f32
 }
 
 /// Paints a shaped line with its baseline origin at `origin` (unscaled
 /// coordinates), scaled, blurred by `taps` (offsets in scaled pixels).
-pub(super) fn paint_text(
+pub(crate) fn paint_text(
     line: &ShapedLine,
     origin: Point<Pixels>,
     font_size: Pixels,
@@ -590,7 +686,7 @@ pub(super) fn paint_text(
 /// loading sweep. `band` is in unscaled coordinates; masks nest so the band
 /// fades out towards its edges like the CSS gradient does.
 #[allow(clippy::too_many_arguments)]
-pub(super) fn paint_sweep(
+pub(crate) fn paint_sweep(
     line: &ShapedLine,
     origin: Point<Pixels>,
     line_bounds: Bounds<Pixels>,
@@ -647,7 +743,7 @@ pub(super) fn paint_sweep(
 /// Paints an SVG icon into `bounds` (unscaled), scaled about `scale` and by
 /// its own `own_scale` about its center, blurred by `taps`.
 #[allow(clippy::too_many_arguments)]
-pub(super) fn paint_icon(
+pub(crate) fn paint_icon(
     path: &SharedString,
     data: Option<&[u8]>,
     bounds: Bounds<Pixels>,
@@ -683,6 +779,26 @@ pub(super) fn paint_icon(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[track_caller]
+    fn assert_rgba(color: Hsla, expected: (f32, f32, f32, f32)) {
+        let c = color.to_rgb();
+        let actual = (c.r * 255., c.g * 255., c.b * 255., c.a);
+        let close = (actual.0 - expected.0).abs() < 0.6
+            && (actual.1 - expected.1).abs() < 0.6
+            && (actual.2 - expected.2).abs() < 0.6
+            && (actual.3 - expected.3).abs() < 0.002;
+        assert!(close, "{actual:?} != {expected:?}");
+    }
+
+    #[test]
+    fn mixing_with_transparent_keeps_the_color() {
+        let red = rgba(255, 107, 95, 1.);
+        assert_rgba(
+            mix(Hsla::transparent_black(), red, 0.16),
+            (255., 107., 95., 0.16),
+        );
+    }
 
     #[test]
     fn no_blur_is_one_full_tap() {
