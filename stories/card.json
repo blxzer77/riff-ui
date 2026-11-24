@@ -1,0 +1,175 @@
+{
+  "slug": "card",
+  "name": "Card",
+  "category": "Cards",
+  "description": "White card on a soft gray tray with header, content, tray footer, interactive lift and selected fill",
+  "sections": [
+    {
+      "id": "anatomy",
+      "title": "Anatomy",
+      "rows": [
+        {
+          "id": "parts",
+          "title": "parts",
+          "props": { "width": 280 },
+          "cells": [
+            {
+              "id": "full",
+              "props": {
+                "icon": "bot",
+                "title": "Support triage",
+                "description": "Sorts new tickets and drafts the first reply",
+                "actionIcon": "ellipsis",
+                "content": "142 tickets this week · 96% resolved",
+                "footer": "Running · started 2 min ago"
+              }
+            },
+            {
+              "id": "header-only",
+              "props": {
+                "title": "Workspace",
+                "description": "Shown in the sidebar and in invites"
+              }
+            },
+            {
+              "id": "title-only",
+              "props": {
+                "title": "Quick note"
+              }
+            },
+            {
+              "id": "content-only",
+              "props": {
+                "content": "Just the card body, without a header or footer."
+              }
+            },
+            {
+              "id": "footer-only",
+              "props": {
+                "footer": "Synced 2m ago"
+              }
+            },
+            {
+              "id": "header-extra",
+              "props": {
+                "title": "Build pipeline",
+                "description": "Runs on every pull request",
+                "headerExtra": "3 active checks"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "States",
+      "rows": [
+        {
+          "id": "interactive",
+          "title": "interactive",
+          "props": { "width": 260, "interactive": true },
+          "cells": [
+            {
+              "id": "resting",
+              "props": {
+                "title": "Code reviewer",
+                "description": "Checks diffs for regressions",
+                "footer": "Idle · last run 1h ago"
+              }
+            },
+            {
+              "id": "hover",
+              "state": "hover",
+              "props": {
+                "title": "Code reviewer",
+                "description": "Checks diffs for regressions",
+                "footer": "Idle · last run 1h ago"
+              }
+            },
+            {
+              "id": "focus",
+              "state": "focus",
+              "props": {
+                "title": "Code reviewer",
+                "description": "Checks diffs for regressions",
+                "footer": "Idle · last run 1h ago"
+              }
+            }
+          ]
+        },
+        {
+          "id": "selected",
+          "title": "selected",
+          "props": { "width": 260 },
+          "cells": [
+            {
+              "id": "selected",
+              "props": {
+                "selected": true,
+                "title": "Standard plan",
+                "description": "Up to 10 active agents",
+                "footer": "Current plan"
+              }
+            },
+            {
+              "id": "interactive-selected",
+              "props": {
+                "interactive": true,
+                "selected": true,
+                "title": "Standard plan",
+                "description": "Up to 10 active agents",
+                "footer": "Current plan"
+              }
+            },
+            {
+              "id": "selected-hover",
+              "state": "hover",
+              "props": {
+                "interactive": true,
+                "selected": true,
+                "title": "Standard plan",
+                "description": "Up to 10 active agents",
+                "footer": "Current plan"
+              }
+            },
+            {
+              "id": "selected-focus",
+              "state": "focus",
+              "props": {
+                "interactive": true,
+                "selected": true,
+                "title": "Standard plan",
+                "description": "Up to 10 active agents",
+                "footer": "Current plan"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wrapping",
+      "title": "Wrapping & layout",
+      "rows": [
+        {
+          "id": "narrow",
+          "title": "narrow",
+          "props": { "width": 200 },
+          "cells": [
+            {
+              "id": "long-text",
+              "props": {
+                "icon": "folder",
+                "title": "Long repository title that wraps across lines",
+                "description": "Contains an_unbreakable_identifier_token_name that wraps cleanly inside the card.",
+                "content": "Body copy also wraps without pushing the card wider than its container.",
+                "footer": "Updated 5 minutes ago · Frankfurt"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

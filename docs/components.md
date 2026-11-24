@@ -18,6 +18,7 @@
 | `spinner` | `spinner` | 自研 | 完成 | 加载旋转指示器（16×16 viewBox，20% 背景环 + 90° 圆角弧），默认 14px、继承 `currentColor`、750ms 线性旋转（`reduce_motion` 下减速为 2.4s 保持旋转），支持自定义速度、`freeze_motion_at` 冻结帧与仅在设 `label` 时暴露 `role="status"`。已与原库 19 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 | `skeleton` | `skeleton` | 自研 | 完成 | `Skeleton` 占位条（默认 `100%`×`12px`、受 `max-width: 100%` 限制、`circle` 50% 圆角、`line`/`line_height` 行高垂直居中、全局同步 1.6s 扫光渐变且 `reduce_motion` 下停止）与 `Loading` 容器（`role="status"` + `aria-busy` + `150ms` 延迟防闪烁淡入）。已与原库 12 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 | `avatar` | `avatar` | 自研 | 完成 | `Avatar`（`20/24/32/40`、`circle`/`square`、8 色确定性背景与 `seed`、首字母 `unicode-segmentation` 分词与后缀跳过、匿名轮廓、图片懒加载与 180ms 淡入、角标 `online`/`away`/`busy` 状态点、Agent 对称 3×3 像素徽记及 1.2s 对角波浪闪烁与 `reduce_motion` 停止）与 `AvatarGroup`（1/4 重叠、`+N`/`99+` 溢出徽章与背景镂空环）。已与原库 60 格（亮/暗 Stacked 与 Overlay）对照对齐 |
+| `card` | `card` | base | 完成 | `Card` / `CardHeader` / `CardContent` / `CardFooter`（浅灰外托盘 `radius_lg+4px` + 内白卡 `radius_lg`、`--riff-shadow-card` 阴影及 160ms hover 抬升、`selected` 选中态、`interactive` 全卡点击与 `pressed` 切换、内部按钮 `block_mouse_except_scroll` 独立响应、语义角色 `Section`/`Article`/`ListItem` 及外圈 2px 焦点环）。同时查清并修复了 `--riff-shadow-card` 底边偏深问题（`paint::drop_shadows` 用抗锯齿路径画 `0.5px` 实心环，避免 GPUI `cover_bounds` 在 1× 下外扩成 1px）。已与原库 14 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 
 ### button 与原库的对齐
 

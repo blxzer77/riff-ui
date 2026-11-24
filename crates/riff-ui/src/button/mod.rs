@@ -408,6 +408,7 @@ impl RenderOnce for Button {
         let button = base::Button::new(self.id.clone())
             .track_focus(&focus)
             .disabled(self.disabled)
+            .block_mouse_except_scroll()
             .flex_none()
             .w(width)
             .h(painter.content.metrics.height)

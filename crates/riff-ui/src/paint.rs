@@ -453,10 +453,23 @@ fn paint_band_with(
 /// corners of radius `r + s` (never below 0). GPUI keeps the element's own
 /// radius for the dilated shadow, which made primary's `0 0 0 1px` ring
 /// square-cornered and sit outside riff-uiux's at every corner.
-fn drop_shadows(outer: Bounds<Pixels>, r: Pixels, shadows: &[BoxShadow], window: &mut Window) {
+pub(crate) fn drop_shadows(
+    outer: Bounds<Pixels>,
+    r: Pixels,
+    shadows: &[BoxShadow],
+    window: &mut Window,
+) {
     for shadow in shadows {
-        let radius = (r + shadow.spread_radius).max(px(0.));
-        window.paint_drop_shadows(outer, Corners::all(radius), std::slice::from_ref(shadow));
+        let solid_ring = shadow.blur_radius == px(0.)
+            && shadow.offset == Point::default()
+            && shadow.spread_radius > px(0.);
+        if solid_ring {
+            let s = shadow.spread_radius;
+            paint_band(outer.dilate(s), r + s, outer, r, shadow.color, window);
+        } else {
+            let radius = (r + shadow.spread_radius).max(px(0.));
+            window.paint_drop_shadows(outer, Corners::all(radius), std::slice::from_ref(shadow));
+        }
     }
 }
 

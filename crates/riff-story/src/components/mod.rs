@@ -3,6 +3,7 @@
 pub mod avatar;
 pub mod badge;
 pub mod button;
+pub mod card;
 pub mod icon_button;
 pub mod kbd;
 pub mod separator;

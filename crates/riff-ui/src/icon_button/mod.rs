@@ -277,6 +277,7 @@ impl RenderOnce for IconButton {
             let mut el = el
                 .track_focus(&focus)
                 .disabled(disabled)
+                .block_mouse_except_scroll()
                 .flex_none()
                 .w(metrics.side)
                 .h(metrics.side)
@@ -501,6 +502,13 @@ impl AnyHost {
         match self {
             Self::Button(b) => Self::Button(Box::new(b.disabled(disabled))),
             Self::Toggle(t) => Self::Toggle(Box::new(t.disabled(disabled))),
+        }
+    }
+
+    fn block_mouse_except_scroll(self) -> Self {
+        match self {
+            Self::Button(b) => Self::Button(Box::new(b.block_mouse_except_scroll())),
+            Self::Toggle(t) => Self::Toggle(Box::new(t.block_mouse_except_scroll())),
         }
     }
 

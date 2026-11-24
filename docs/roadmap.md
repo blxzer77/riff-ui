@@ -15,7 +15,7 @@
 | ---- | ---- | ---- |
 | button 文字被截断时，悬停显示全文 | button | 做完 tooltip 后补 |
 | `--riff-font-mono` / `--riff-mono` 未实现，用的是 gpui-component 的等宽字体 | theme | 做 code-block、kbd 时一并处理 |
-| 卡片阴影 `--riff-shadow-card` 紧贴底边那一行比原库深（225 对 237） | theme | 做 card 时对照查清 |
+| 卡片阴影 `--riff-shadow-card` 紧贴底边那一行比原库深（225 对 237） | theme | 已查清：`paint_drop_shadows` 的 `cover_bounds` 在 1× 下把 `0.5px` spread 外扩成 1px（亮度翻倍）。`paint::drop_shadows` 已改用 `paint_band` 绘制实心环，`Card` 实测顶/底阴影与原库一致（231/220 对 232/222）；`tokens` 展示页仍用 `.shadow()` 未改 |
 | 按下状态的路径抗锯齿在显卡不支持 4× MSAA 时会降到 2× 或 1×，只在本机验证过 | button | 换机器时复查 |
 | `tools/reference/build.py` 写死了原库路径和 cargo 缓存里 Lucide 图标的路径，只能在这台机器上跑 | 工具 | 需要换机器时改成可配置 |
 
@@ -27,11 +27,9 @@
 
 把 button 定下的写法推广到更多组件，风险低，也是后面各阶段都会用到的部件。
 
-~~`icon-button`~~（已完成）、~~`badge`~~（已完成）、~~`kbd`~~（已完成）、~~`separator`~~（已完成）、~~`spinner`~~（已完成）、~~`skeleton`~~（已完成）、~~`avatar`~~（已完成）、`card`、`gradient-text`
+~~`icon-button`~~（已完成）、~~`badge`~~（已完成）、~~`kbd`~~（已完成）、~~`separator`~~（已完成）、~~`spinner`~~（已完成）、~~`skeleton`~~（已完成）、~~`avatar`~~（已完成）、~~`card`~~（已完成）、`gradient-text`
 
-- `icon-button`、`badge`、`kbd`、`separator`、`spinner`、`skeleton`、`avatar` 已完成；下一个做 `card`。
-- `card` 用到 `--riff-shadow-card`，顺带查清上面的阴影遗留。
-- gpui-base 有 `avatar` 的行为。
+- 阶段 1 还剩 `gradient-text`。
 
 ### 阶段 2：浮层（7 个）
 
