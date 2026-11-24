@@ -1,0 +1,53 @@
+{
+  "slug": "separator",
+  "name": "Separator",
+  "category": "Data display",
+  "description": "A 1px line between groups — horizontal or vertical, with an optional centered label",
+  "sections": [
+    {
+      "id": "horizontal",
+      "title": "Horizontal",
+      "rows": [
+        {
+          "id": "plain",
+          "title": "plain",
+          "cells": [
+            { "id": "default", "props": { "width": 220 } },
+            { "id": "narrow", "props": { "width": 120 } },
+            { "id": "empty-label", "props": { "width": 160, "label": "" } },
+            { "id": "semantic", "props": { "width": 180, "decorative": false } }
+          ]
+        },
+        {
+          "id": "labelled",
+          "title": "labelled",
+          "cells": [
+            { "id": "or", "props": { "width": 220, "label": "or" } },
+            { "id": "earlier", "props": { "width": 220, "label": "Earlier" } },
+            { "id": "today-semantic", "props": { "width": 220, "label": "Today", "decorative": false } },
+            { "id": "wrapping", "props": { "width": 160, "label": "Continue with another method" } },
+            { "id": "tight", "props": { "width": 100, "label": "Longer break" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "title": "Vertical",
+      "rows": [
+        {
+          "id": "upright",
+          "title": "upright",
+          "props": { "orientation": "vertical" },
+          "cells": [
+            { "id": "default", "props": {} },
+            { "id": "h-24", "props": { "height": 24 } },
+            { "id": "h-32", "props": { "height": 32 } },
+            { "id": "ignores-label", "props": { "label": "ignored" } },
+            { "id": "semantic", "props": { "decorative": false } }
+          ]
+        }
+      ]
+    }
+  ]
+}

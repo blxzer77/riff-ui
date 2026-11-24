@@ -188,8 +188,19 @@ impl Props {
         self.0.get(key).and_then(Value::as_bool).unwrap_or(false)
     }
 
+    pub fn bool_or(&self, key: &str, default: bool) -> bool {
+        self.0.get(key).and_then(Value::as_bool).unwrap_or(default)
+    }
+
     pub fn i64(&self, key: &str) -> Option<i64> {
         self.0.get(key).and_then(Value::as_i64)
+    }
+
+    pub fn f32(&self, key: &str) -> Option<f32> {
+        self.0
+            .get(key)
+            .and_then(Value::as_f64)
+            .map(|value| value as f32)
     }
 
     /// Reads either a JSON string (single item) or an array of strings.

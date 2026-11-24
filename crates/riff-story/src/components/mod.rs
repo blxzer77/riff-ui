@@ -4,6 +4,7 @@ pub mod badge;
 pub mod button;
 pub mod icon_button;
 pub mod kbd;
+pub mod separator;
 pub mod tokens;
 
 #[cfg(test)]
