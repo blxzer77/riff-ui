@@ -15,6 +15,7 @@
 | `badge` | `badge` | 自研 | 完成 | 六色调胶囊标签（`neutral` / `info` / `success` / `warning` / `danger` / `purple`），支持 `sm`/`md`、`dot`、`live`（1.8s 脉冲光环，支持冻结帧与 `reduce_motion`）、`icon`、等宽数字 `count`（`max+` 上限与千分位分组）及空值不渲染。已与原库 47 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 | `kbd` | `kbd` | 自研 | 完成 | 快捷键按键帽（单键与组合键），支持 `sm`/`md`、`mac`/`other` 平台映射（`mod` 在 Mac 为 `⌘`、其余为 `Ctrl`）及 1px 立体底边（`inset -1px`），屏幕阅读器自动拼读完整键名。已与原库 56 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 | `separator` | `separator` | 自研 | 完成 | 水平/垂直 1px 分隔线，支持居中标签（`12.5px`/`18px` 行高、`12px` 间距与最小线宽、80% 最大宽度折行）、`vertical` 默认 18px 居中及自定义长度、`decorative` 控制 `role="separator"` 语义及方向/名称。已与原库 14 格（亮/暗 Stacked 与 Overlay）对照对齐 |
+| `spinner` | `spinner` | 自研 | 完成 | 加载旋转指示器（16×16 viewBox，20% 背景环 + 90° 圆角弧），默认 14px、继承 `currentColor`、750ms 线性旋转（`reduce_motion` 下减速为 2.4s 保持旋转），支持自定义速度、`freeze_motion_at` 冻结帧与仅在设 `label` 时暴露 `role="status"`。已与原库 19 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 
 ### button 与原库的对齐
 

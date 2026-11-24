@@ -60,6 +60,7 @@ pub fn entries() -> Vec<Entry> {
         entry!("icon-button", icon_button),
         entry!("kbd", kbd),
         entry!("separator", separator),
+        entry!("spinner", spinner),
     ]
 }
 

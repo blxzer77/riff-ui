@@ -1,0 +1,66 @@
+{
+  "slug": "spinner",
+  "name": "Spinner",
+  "category": "Feedback",
+  "description": "A turning arc on a faint ring in currentColor, any size, with an optional status label",
+  "freeze_ms": 150,
+  "sections": [
+    {
+      "id": "sizes",
+      "title": "Sizes",
+      "rows": [
+        {
+          "id": "scale",
+          "title": "size",
+          "cells": [
+            { "id": "10", "props": { "size": 10 } },
+            { "id": "12", "props": { "size": 12 } },
+            { "id": "14-default", "props": {} },
+            { "id": "16", "props": { "size": 16 } },
+            { "id": "20", "props": { "size": 20 } },
+            { "id": "24", "props": { "size": 24 } },
+            { "id": "32", "props": { "size": 32 } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "colors",
+      "title": "Current color",
+      "rows": [
+        {
+          "id": "tones",
+          "title": "color",
+          "props": { "size": 16 },
+          "cells": [
+            { "id": "ink", "props": { "color": "ink" } },
+            { "id": "muted", "props": { "color": "muted" } },
+            { "id": "info", "props": { "color": "info" } },
+            { "id": "success", "props": { "color": "success" } },
+            { "id": "warning", "props": { "color": "warning" } },
+            { "id": "danger", "props": { "color": "danger" } },
+            { "id": "purple", "props": { "color": "purple" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phases-and-a11y",
+      "title": "Speed & accessibility",
+      "rows": [
+        {
+          "id": "speed-and-label",
+          "title": "speed / label",
+          "props": { "size": 18 },
+          "cells": [
+            { "id": "fast-375ms", "props": { "speedMs": 375 } },
+            { "id": "normal-750ms", "props": { "speedMs": 750 } },
+            { "id": "slow-1500ms", "props": { "speedMs": 1500 } },
+            { "id": "reduced-2400ms", "props": { "speedMs": 2400 } },
+            { "id": "labelled", "props": { "size": 14, "label": "Checking domain" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -9,12 +9,17 @@ use gpui_kit::{
 /// requiring an `ElementId` or adding a layout node.
 pub(crate) struct A11yLabel<E> {
     inner: E,
+    role: Role,
     label: Option<SharedString>,
 }
 
 impl<E> A11yLabel<E> {
     pub fn new(inner: E, label: Option<SharedString>) -> Self {
-        Self { inner, label }
+        Self::with_role(inner, Role::GenericContainer, label)
+    }
+
+    pub fn with_role(inner: E, role: Role, label: Option<SharedString>) -> Self {
+        Self { inner, role, label }
     }
 }
 
@@ -78,7 +83,7 @@ impl<E: Element> Element for A11yLabel<E> {
     fn a11y_role(&self) -> Option<Role> {
         self.inner
             .a11y_role()
-            .or_else(|| self.label.as_ref().map(|_| Role::GenericContainer))
+            .or_else(|| self.label.as_ref().map(|_| self.role))
     }
 
     fn write_a11y_info(&self, node: &mut accesskit::Node) {
