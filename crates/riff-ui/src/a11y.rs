@@ -11,6 +11,7 @@ pub(crate) struct A11yLabel<E> {
     inner: E,
     role: Role,
     label: Option<SharedString>,
+    busy: bool,
 }
 
 impl<E> A11yLabel<E> {
@@ -19,7 +20,17 @@ impl<E> A11yLabel<E> {
     }
 
     pub fn with_role(inner: E, role: Role, label: Option<SharedString>) -> Self {
-        Self { inner, role, label }
+        Self {
+            inner,
+            role,
+            label,
+            busy: false,
+        }
+    }
+
+    pub fn busy(mut self, busy: bool) -> Self {
+        self.busy = busy;
+        self
     }
 }
 
@@ -90,6 +101,9 @@ impl<E: Element> Element for A11yLabel<E> {
         self.inner.write_a11y_info(node);
         if let Some(label) = &self.label {
             node.set_label(label.as_ref());
+        }
+        if self.busy {
+            node.set_busy();
         }
     }
 

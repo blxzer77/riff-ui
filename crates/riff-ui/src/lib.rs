@@ -7,6 +7,7 @@ pub mod icon_button;
 pub mod kbd;
 pub(crate) mod paint;
 pub mod separator;
+pub mod skeleton;
 pub mod spinner;
 pub mod theme;
 

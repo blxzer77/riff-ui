@@ -1,0 +1,45 @@
+{
+  "slug": "skeleton",
+  "name": "Skeleton",
+  "category": "Feedback",
+  "description": "Gray placeholder shapes with a synchronized sheen sweep and a delayed Loading status wrapper",
+  "freeze_ms": 300,
+  "sections": [
+    {
+      "id": "shapes",
+      "title": "Shapes & radii",
+      "rows": [
+        {
+          "id": "sizes",
+          "title": "sizes",
+          "cells": [
+            { "id": "default", "props": { "containerWidth": 160 } },
+            { "id": "bar-sm", "props": { "width": 120, "height": 10 } },
+            { "id": "bar-lg", "props": { "width": 180, "height": 16 } },
+            { "id": "square", "props": { "width": 36, "height": 36, "radius": 4 } },
+            { "id": "avatar", "props": { "width": 36, "height": 36, "circle": true } },
+            { "id": "pill", "props": { "width": 72, "height": 22, "radius": 999 } },
+            { "id": "clamped", "props": { "containerWidth": 100, "width": 220, "height": 12 } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "line-and-group",
+      "title": "Line wrapper & Loading",
+      "rows": [
+        {
+          "id": "line-box",
+          "title": "line",
+          "cells": [
+            { "id": "line-20", "props": { "width": 140, "height": 10, "lineHeight": 20 } },
+            { "id": "line-28", "props": { "width": 160, "height": 12, "lineHeight": 28 } },
+            { "id": "list-row", "props": { "preset": "row" } },
+            { "id": "loading-visible", "props": { "preset": "loading", "loadingAtMs": 600 } },
+            { "id": "loading-mid-fade", "props": { "preset": "loading", "loadingAtMs": 300 } }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ pub mod button;
 pub mod icon_button;
 pub mod kbd;
 pub mod separator;
+pub mod skeleton;
 pub mod spinner;
 pub mod tokens;
 
