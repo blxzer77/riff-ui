@@ -11,12 +11,17 @@
 //! antialiased paths instead (`paint_box_scaled`).
 
 use std::f32::consts::PI;
+use std::sync::Arc;
 
 use gpui_kit::{
-    App, Background, BorderStyle, Bounds, BoxShadow, ContentMask, Corners, Edges, Hsla,
-    PathBuilder, Pixels, Point, Radians, Rgba, ShapedLine, SharedString, Size,
+    App, Background, BorderStyle, Bounds, BoxShadow, ContentMask, Corners, Edges, FontFeatures,
+    Hsla, PathBuilder, Pixels, Point, Radians, Rgba, ShapedLine, SharedString, Size,
     TransformationMatrix, Window, linear_color_stop, linear_gradient, point, px, quad, size,
 };
+
+pub(crate) fn tabular_figures() -> FontFeatures {
+    FontFeatures(Arc::new(vec![("tnum".into(), 1)]))
+}
 
 /// How a control variant paints its box.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -643,18 +648,20 @@ pub(crate) fn tracking(font_size: Pixels) -> Pixels {
     font_size * -0.01
 }
 
-/// The distance a glyph shifts under [`tracking`]: each character carries the
-/// spacing after it.
-pub(crate) fn tracked_offset(font_size: Pixels, glyph_index: usize) -> Pixels {
-    tracking(font_size) * glyph_index as f32
+/// The distance a glyph shifts under `letter_spacing` (`px` per character).
+pub(crate) fn tracked_offset(letter_spacing: Pixels, glyph_index: usize) -> Pixels {
+    letter_spacing * glyph_index as f32
 }
 
 /// Paints a shaped line with its baseline origin at `origin` (unscaled
-/// coordinates), scaled, blurred by `taps` (offsets in scaled pixels).
-pub(crate) fn paint_text(
+/// coordinates), scaled, blurred by `taps` (offsets in scaled pixels), with
+/// explicit `letter_spacing`.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn paint_text_tracked(
     line: &ShapedLine,
     origin: Point<Pixels>,
     font_size: Pixels,
+    letter_spacing: Pixels,
     color: Hsla,
     scale: Scale,
     taps: &[Tap],
@@ -664,7 +671,9 @@ pub(crate) fn paint_text(
     for run in &line.runs {
         for glyph in &run.glyphs {
             let at = scale.point(
-                origin + glyph.position + point(tracked_offset(font_size, glyph.index), px(0.)),
+                origin
+                    + glyph.position
+                    + point(tracked_offset(letter_spacing, glyph.index), px(0.)),
             );
             for tap in taps {
                 let at = at + tap.offset;
@@ -680,6 +689,28 @@ pub(crate) fn paint_text(
             }
         }
     }
+}
+
+/// Paints a shaped line with button's `-0.01em` tracking.
+pub(crate) fn paint_text(
+    line: &ShapedLine,
+    origin: Point<Pixels>,
+    font_size: Pixels,
+    color: Hsla,
+    scale: Scale,
+    taps: &[Tap],
+    window: &mut Window,
+) {
+    paint_text_tracked(
+        line,
+        origin,
+        font_size,
+        tracking(font_size),
+        color,
+        scale,
+        taps,
+        window,
+    );
 }
 
 /// Paints the glyphs of `line` that fall into a horizontal band, for the
@@ -731,7 +762,7 @@ pub(crate) fn paint_sweep(
                     let at = scale.point(
                         origin
                             + glyph.position
-                            + point(tracked_offset(font_size, glyph.index), px(0.)),
+                            + point(tracked_offset(tracking(font_size), glyph.index), px(0.)),
                     );
                     let _ = window.paint_glyph(at, run.font_id, glyph.id, scaled_size, color);
                 }

@@ -13,6 +13,7 @@
 | `button` | `button` | base | 完成 | 行为用 gpui-base `Button`，外观全部自绘（按下缩到 97% 需要整体缩放，GPUI 的 div 做不到）。已与原库逐格对齐（见下）。模糊淡入用多层高斯采样近似；截断后悬停显示全文未实现（等 tooltip） |
 | `icon-button` | `icon_button` | base | 完成 | 普通按钮用 gpui-base `Button`，设 `pressed` 时切为 gpui-base `Toggle`（提供 `aria-pressed`）；外观自绘（含 `:active` 95% 缩放、`reduce_motion` 下跳过缩放）。已与原库 35 格（亮/暗 Stacked 与 Overlay）逐格对齐。tooltip 暂借 gpui-component `Tooltip`（待阶段 2 `tooltip` 完成后替换） |
 | `badge` | `badge` | 自研 | 完成 | 六色调胶囊标签（`neutral` / `info` / `success` / `warning` / `danger` / `purple`），支持 `sm`/`md`、`dot`、`live`（1.8s 脉冲光环，支持冻结帧与 `reduce_motion`）、`icon`、等宽数字 `count`（`max+` 上限与千分位分组）及空值不渲染。已与原库 47 格（亮/暗 Stacked 与 Overlay）对照对齐 |
+| `kbd` | `kbd` | 自研 | 完成 | 快捷键按键帽（单键与组合键），支持 `sm`/`md`、`mac`/`other` 平台映射（`mod` 在 Mac 为 `⌘`、其余为 `Ctrl`）及 1px 立体底边（`inset -1px`），屏幕阅读器自动拼读完整键名。已与原库 56 格（亮/暗 Stacked 与 Overlay）对照对齐 |
 
 ### button 与原库的对齐
 

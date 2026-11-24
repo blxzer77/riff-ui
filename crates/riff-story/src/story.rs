@@ -192,6 +192,15 @@ impl Props {
         self.0.get(key).and_then(Value::as_i64)
     }
 
+    /// Reads either a JSON string (single item) or an array of strings.
+    pub fn strings(&self, key: &str) -> Option<Vec<&str>> {
+        match self.0.get(key)? {
+            Value::String(s) => Some(vec![s.as_str()]),
+            Value::Array(items) => items.iter().map(Value::as_str).collect::<Option<Vec<_>>>(),
+            _ => None,
+        }
+    }
+
     /// Every key, so a component can reject props it does not understand
     /// instead of silently drawing something else.
     pub fn keys(&self) -> impl Iterator<Item = &str> {

@@ -1,0 +1,94 @@
+{
+  "slug": "kbd",
+  "name": "Kbd",
+  "category": "Text",
+  "description": "Key chip for shortcuts — one key or a combo in one chip, Mac symbols vs Ctrl/Alt/Shift, two sizes and free text",
+  "sections": [
+    {
+      "id": "platforms",
+      "title": "Platforms and sizes",
+      "rows": [
+        {
+          "id": "mac-sm",
+          "title": "mac sm",
+          "props": { "platform": "mac", "size": "sm" },
+          "cells": "@combos"
+        },
+        {
+          "id": "mac-md",
+          "title": "mac md",
+          "props": { "platform": "mac", "size": "md" },
+          "cells": "@combos"
+        },
+        {
+          "id": "other-sm",
+          "title": "other sm",
+          "props": { "platform": "other", "size": "sm" },
+          "cells": "@combos"
+        },
+        {
+          "id": "other-md",
+          "title": "other md",
+          "props": { "platform": "other", "size": "md" },
+          "cells": "@combos"
+        }
+      ]
+    },
+    {
+      "id": "keys",
+      "title": "Named keys, arrows and free text",
+      "rows": [
+        {
+          "id": "named-mac",
+          "title": "named mac",
+          "props": { "platform": "mac" },
+          "cells": "@named"
+        },
+        {
+          "id": "named-other",
+          "title": "named other",
+          "props": { "platform": "other" },
+          "cells": "@named"
+        },
+        {
+          "id": "misc",
+          "title": "arrows & text",
+          "cells": [
+            { "id": "up", "props": { "keys": "up" } },
+            { "id": "down", "props": { "keys": "down" } },
+            { "id": "left", "props": { "keys": "left" } },
+            { "id": "right", "props": { "keys": "right" } },
+            { "id": "pageup", "props": { "keys": "pageup" } },
+            { "id": "pagedown", "props": { "keys": "pagedown" } },
+            { "id": "home", "props": { "keys": "home" } },
+            { "id": "end", "props": { "keys": "end" } },
+            { "id": "fn", "props": { "label": "Fn" } },
+            { "id": "fn-md", "props": { "size": "md", "label": "Fn" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "combos": [
+      { "id": "single-k", "props": { "keys": "k" } },
+      { "id": "esc", "props": { "keys": "esc" } },
+      { "id": "mod-k", "props": { "keys": ["mod", "K"] } },
+      { "id": "mod-enter", "props": { "keys": ["mod", "enter"] } },
+      { "id": "mod-shift-a", "props": { "keys": ["mod", "shift", "A"] } },
+      { "id": "alt-dot", "props": { "keys": ["alt", "."] } },
+      { "id": "ctrl-alt-del", "props": { "keys": ["ctrl", "alt", "delete"] } }
+    ],
+    "named": [
+      { "id": "cmd", "props": { "keys": "cmd" } },
+      { "id": "ctrl", "props": { "keys": "ctrl" } },
+      { "id": "alt", "props": { "keys": "alt" } },
+      { "id": "shift", "props": { "keys": "shift" } },
+      { "id": "enter", "props": { "keys": "enter" } },
+      { "id": "tab", "props": { "keys": "tab" } },
+      { "id": "space", "props": { "keys": "space" } },
+      { "id": "backspace", "props": { "keys": "backspace" } },
+      { "id": "delete", "props": { "keys": "delete" } }
+    ]
+  }
+}

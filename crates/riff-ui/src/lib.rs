@@ -1,8 +1,10 @@
 //! riff-ui: a UI component library built on GPUI.
 
+mod a11y;
 pub mod badge;
 pub mod button;
 pub mod icon_button;
+pub mod kbd;
 pub(crate) mod paint;
 pub mod theme;
 

@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use gpui_kit::{
     Bounds, Context, Element as _, IntoElement, ParentElement as _, Pixels, Render,
-    RenderOnce as _, Styled as _, TestAppContext, Window, canvas, div, px,
+    RenderOnce as _, Styled as _, TestAppContext, Window, accesskit, canvas, div, px,
 };
 
 use super::*;

@@ -5,17 +5,15 @@ mod style;
 #[cfg(test)]
 mod tests;
 
-use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use gpui_kit::base::Easing;
 use gpui_kit::{
-    A11ySubtreeBuilder, App, Bounds, Element, ElementId, Empty, FontFeatures, FontWeight, Global,
-    GlobalElementId, Hsla, InspectorElementId, IntoElement, LayoutId, ParentElement, Pixels,
-    RenderOnce, Role, SharedString, Styled, Window, accesskit, canvas, div,
-    prelude::FluentBuilder as _, px,
+    App, Empty, FontWeight, Global, Hsla, IntoElement, ParentElement, RenderOnce, SharedString,
+    Styled, Window, canvas, div, prelude::FluentBuilder as _, px,
 };
 
+use crate::a11y::A11yLabel;
 pub use crate::button::ButtonIcon as BadgeIcon;
 use crate::paint;
 use crate::theme::RiffTheme;
@@ -235,10 +233,6 @@ fn format_grouped(n: u64) -> String {
     out.chars().rev().collect()
 }
 
-fn tabular_figures() -> FontFeatures {
-    FontFeatures(Arc::new(vec![("tnum".into(), 1)]))
-}
-
 impl RenderOnce for Badge {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let is_count = self.count.is_some();
@@ -311,7 +305,7 @@ impl RenderOnce for Badge {
             .text_size(metrics.font_size)
             .font_weight(FontWeight::MEDIUM)
             .line_height(metrics.line_height)
-            .font_features(tabular_figures())
+            .font_features(paint::tabular_figures())
             .when(lead == Lead::Dot, |this| {
                 this.child(dot_mark(look.dot, halo))
             })
@@ -360,96 +354,4 @@ fn dot_mark(color: Hsla, halo: Option<(f32, f32)>) -> impl IntoElement {
     .mx(DOT_MARGIN_X)
     .w(DOT_SIZE)
     .h(DOT_SIZE)
-}
-
-/// Attaches an `accesskit` label to a non-interactive badge without requiring
-/// an `ElementId` or adding a layout node.
-struct A11yLabel<E> {
-    inner: E,
-    label: Option<SharedString>,
-}
-
-impl<E> A11yLabel<E> {
-    fn new(inner: E, label: Option<SharedString>) -> Self {
-        Self { inner, label }
-    }
-}
-
-impl<E: Element> IntoElement for A11yLabel<E> {
-    type Element = Self;
-
-    fn into_element(self) -> Self {
-        self
-    }
-}
-
-impl<E: Element> Element for A11yLabel<E> {
-    type RequestLayoutState = E::RequestLayoutState;
-    type PrepaintState = E::PrepaintState;
-
-    fn id(&self) -> Option<ElementId> {
-        self.inner.id()
-    }
-
-    fn source_location(&self) -> Option<&'static std::panic::Location<'static>> {
-        self.inner.source_location()
-    }
-
-    fn request_layout(
-        &mut self,
-        id: Option<&GlobalElementId>,
-        inspector: Option<&InspectorElementId>,
-        window: &mut Window,
-        cx: &mut App,
-    ) -> (LayoutId, Self::RequestLayoutState) {
-        self.inner.request_layout(id, inspector, window, cx)
-    }
-
-    fn prepaint(
-        &mut self,
-        id: Option<&GlobalElementId>,
-        inspector: Option<&InspectorElementId>,
-        bounds: Bounds<Pixels>,
-        layout: &mut Self::RequestLayoutState,
-        window: &mut Window,
-        cx: &mut App,
-    ) -> Self::PrepaintState {
-        self.inner
-            .prepaint(id, inspector, bounds, layout, window, cx)
-    }
-
-    fn paint(
-        &mut self,
-        id: Option<&GlobalElementId>,
-        inspector: Option<&InspectorElementId>,
-        bounds: Bounds<Pixels>,
-        layout: &mut Self::RequestLayoutState,
-        prepaint: &mut Self::PrepaintState,
-        window: &mut Window,
-        cx: &mut App,
-    ) {
-        self.inner
-            .paint(id, inspector, bounds, layout, prepaint, window, cx)
-    }
-
-    fn a11y_role(&self) -> Option<Role> {
-        self.inner
-            .a11y_role()
-            .or_else(|| self.label.as_ref().map(|_| Role::GenericContainer))
-    }
-
-    fn write_a11y_info(&self, node: &mut accesskit::Node) {
-        self.inner.write_a11y_info(node);
-        if let Some(label) = &self.label {
-            node.set_label(label.as_ref());
-        }
-    }
-
-    fn a11y_synthetic_children(
-        &mut self,
-        prepaint: &mut Self::PrepaintState,
-        builder: &mut A11ySubtreeBuilder,
-    ) {
-        self.inner.a11y_synthetic_children(prepaint, builder);
-    }
 }
