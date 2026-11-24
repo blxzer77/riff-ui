@@ -1,5 +1,6 @@
 //! One module per component: its story cells and an optional demo.
 
+pub mod avatar;
 pub mod badge;
 pub mod button;
 pub mod icon_button;

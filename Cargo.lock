@@ -5946,6 +5946,7 @@ name = "riff-ui"
 version = "0.0.0"
 dependencies = [
  "gpui-kit",
+ "unicode-segmentation",
 ]
 
 [[package]]

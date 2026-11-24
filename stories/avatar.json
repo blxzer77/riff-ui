@@ -1,0 +1,244 @@
+{
+  "slug": "avatar",
+  "name": "Avatar",
+  "category": "Data display",
+  "description": "Person picture or deterministic initials, agent pixel mark, status dot, and overlapping AvatarGroup",
+  "freeze_ms": 600,
+  "templates": {
+    "sizes": [
+      { "id": "20", "props": { "size": 20 } },
+      { "id": "24", "props": { "size": 24 } },
+      { "id": "32", "props": { "size": 32 } },
+      { "id": "40", "props": { "size": 40 } }
+    ]
+  },
+  "sections": [
+    {
+      "id": "sizes-shapes",
+      "title": "Sizes & shapes",
+      "rows": [
+        {
+          "id": "person-circle",
+          "title": "circle",
+          "props": { "name": "Mara Lindqvist" },
+          "cells": "@sizes"
+        },
+        {
+          "id": "person-square",
+          "title": "square",
+          "props": { "name": "Acme Corp", "shape": "square" },
+          "cells": "@sizes"
+        }
+      ]
+    },
+    {
+      "id": "hues-initials",
+      "title": "Hues, initials & pictures",
+      "rows": [
+        {
+          "id": "hues",
+          "title": "hues",
+          "cells": [
+            { "id": "hue-0", "props": { "name": "Grace Hall" } },
+            { "id": "hue-1", "props": { "name": "Alice Reed" } },
+            { "id": "hue-2", "props": { "name": "David Evans" } },
+            { "id": "hue-3", "props": { "name": "Iris Lin" } },
+            { "id": "hue-4", "props": { "name": "Mara Lindqvist" } },
+            { "id": "hue-5", "props": { "name": "Henry Adams" } },
+            { "id": "hue-6", "props": { "name": "Clara Diaz" } },
+            { "id": "hue-7", "props": { "name": "Elena Vance" } },
+            { "id": "seed-override", "props": { "name": "Grace Hall", "seed": "user-42" } },
+            { "id": "anonymous", "props": {} }
+          ]
+        },
+        {
+          "id": "initials",
+          "title": "initials",
+          "cells": [
+            { "id": "single", "props": { "name": "Cher" } },
+            { "id": "two", "props": { "name": "Jonas Weber" } },
+            { "id": "suffix-iii", "props": { "name": "Christopher Montgomery III" } },
+            { "id": "suffix-jr", "props": { "name": "Samir Patel Jr." } },
+            { "id": "parens", "props": { "name": "Anne (Support)" } },
+            { "id": "accent", "props": { "name": "Élodie Renaud" } },
+            { "id": "emoji", "props": { "name": "🎉 Party" } },
+            { "id": "flag", "props": { "name": "🇯🇵 Yuki" } }
+          ]
+        },
+        {
+          "id": "picture",
+          "title": "picture",
+          "cells": [
+            { "id": "photo-circle", "props": { "name": "Mara Lindqvist", "photo": true, "status": "online" } },
+            { "id": "photo-square", "props": { "name": "Design Ops", "photo": true, "shape": "square" } },
+            { "id": "broken", "props": { "name": "Elena Vance", "broken": true } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "title": "Status dot",
+      "rows": [
+        {
+          "id": "circle-status",
+          "title": "circle",
+          "cells": [
+            { "id": "online", "props": { "name": "Mara Lindqvist", "status": "online" } },
+            { "id": "away", "props": { "name": "Jonas Weber", "status": "away" } },
+            { "id": "busy", "props": { "name": "Nadia Kim", "status": "busy" } },
+            { "id": "s20-online", "props": { "name": "Mara Lindqvist", "size": 20, "status": "online" } },
+            { "id": "s40-busy", "props": { "name": "Nadia Kim", "size": 40, "status": "busy" } }
+          ]
+        },
+        {
+          "id": "square-status",
+          "title": "square",
+          "props": { "shape": "square" },
+          "cells": [
+            { "id": "online", "props": { "name": "Acme Corp", "status": "online" } },
+            { "id": "away", "props": { "name": "Build Bot", "status": "away" } },
+            { "id": "busy", "props": { "name": "Ops Team", "status": "busy" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "title": "Agent mark",
+      "rows": [
+        {
+          "id": "seeds",
+          "title": "seeds",
+          "props": { "kind": "agent" },
+          "cells": [
+            { "id": "triage", "props": { "seed": "triage", "name": "Triage agent" } },
+            { "id": "coder", "props": { "seed": "coder", "name": "Coder agent" } },
+            { "id": "reviewer", "props": { "seed": "reviewer", "name": "Reviewer agent" } },
+            { "id": "ops", "props": { "seed": "ops", "name": "Ops agent" } },
+            { "id": "purple", "props": { "seed": "triage", "name": "Triage agent", "color": "#a651f0" } },
+            { "id": "green", "props": { "seed": "coder", "name": "Coder agent", "color": "#1e8a4f" } },
+            { "id": "circle", "props": { "seed": "triage", "name": "Triage agent", "shape": "circle" } }
+          ]
+        },
+        {
+          "id": "sizes",
+          "title": "sizes",
+          "props": { "kind": "agent", "seed": "triage", "name": "Triage agent" },
+          "cells": "@sizes"
+        },
+        {
+          "id": "working",
+          "title": "working",
+          "props": { "kind": "agent", "seed": "triage", "name": "Triage agent", "working": true },
+          "cells": [
+            { "id": "20", "props": { "size": 20 } },
+            { "id": "24", "props": { "size": 24 } },
+            { "id": "32", "props": { "size": 32 } },
+            { "id": "40", "props": { "size": 40 } },
+            { "id": "purple", "props": { "size": 32, "color": "#a651f0" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "group",
+      "title": "AvatarGroup",
+      "rows": [
+        {
+          "id": "stacks",
+          "title": "groups",
+          "cells": [
+            {
+              "id": "default",
+              "props": {
+                "group": [
+                  { "name": "Grace Hall" },
+                  { "name": "Alice Reed", "status": "online" },
+                  { "name": "David Evans" },
+                  { "name": "Iris Lin" },
+                  { "name": "Mara Lindqvist" }
+                ]
+              }
+            },
+            {
+              "id": "total-count",
+              "props": {
+                "max": 3,
+                "total": 12,
+                "group": [
+                  { "name": "Grace Hall" },
+                  { "name": "Alice Reed" },
+                  { "name": "David Evans" }
+                ]
+              }
+            },
+            {
+              "id": "overflow-99plus",
+              "props": {
+                "max": 2,
+                "total": 150,
+                "group": [
+                  { "name": "Mara Lindqvist" },
+                  { "name": "Henry Adams" },
+                  { "name": "Clara Diaz" }
+                ]
+              }
+            },
+            {
+              "id": "size-20",
+              "props": {
+                "size": 20,
+                "max": 3,
+                "group": [
+                  { "name": "Grace Hall" },
+                  { "name": "Alice Reed" },
+                  { "name": "David Evans" },
+                  { "name": "Iris Lin" }
+                ]
+              }
+            },
+            {
+              "id": "size-24",
+              "props": {
+                "size": 24,
+                "max": 3,
+                "group": [
+                  { "name": "Grace Hall" },
+                  { "name": "Alice Reed" },
+                  { "name": "David Evans" },
+                  { "name": "Iris Lin" }
+                ]
+              }
+            },
+            {
+              "id": "size-40",
+              "props": {
+                "size": 40,
+                "max": 3,
+                "group": [
+                  { "name": "Grace Hall" },
+                  { "name": "Alice Reed" },
+                  { "name": "David Evans" },
+                  { "name": "Iris Lin" }
+                ]
+              }
+            },
+            {
+              "id": "square-group",
+              "props": {
+                "max": 3,
+                "total": 7,
+                "group": [
+                  { "name": "Acme Corp", "shape": "square" },
+                  { "name": "Design Ops", "shape": "square", "photo": true },
+                  { "kind": "agent", "seed": "triage", "name": "Triage agent" }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

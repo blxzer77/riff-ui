@@ -55,6 +55,7 @@ macro_rules! entry {
 
 pub fn entries() -> Vec<Entry> {
     vec![
+        entry!("avatar", avatar),
         entry!("badge", badge),
         entry!("button", button),
         entry!("icon-button", icon_button),

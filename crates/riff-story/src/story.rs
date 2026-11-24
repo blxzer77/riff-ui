@@ -212,6 +212,17 @@ impl Props {
         }
     }
 
+    /// Reads an array of JSON objects as nested [`Props`].
+    pub fn objects(&self, key: &str) -> Option<Vec<Props>> {
+        match self.0.get(key)? {
+            Value::Array(items) => items
+                .iter()
+                .map(|v| v.as_object().cloned().map(Props))
+                .collect(),
+            _ => None,
+        }
+    }
+
     /// Every key, so a component can reject props it does not understand
     /// instead of silently drawing something else.
     pub fn keys(&self) -> impl Iterator<Item = &str> {

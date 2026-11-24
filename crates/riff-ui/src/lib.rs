@@ -1,6 +1,7 @@
 //! riff-ui: a UI component library built on GPUI.
 
 mod a11y;
+pub mod avatar;
 pub mod badge;
 pub mod button;
 pub mod icon_button;
@@ -21,6 +22,7 @@ const INTER: [&[u8]; 2] = [
     include_bytes!("../assets/fonts/Inter-Regular.ttf"),
     include_bytes!("../assets/fonts/Inter-Medium.ttf"),
 ];
+
 
 /// Initializes riff-ui. Call once before using any component.
 pub fn init(cx: &mut App) {

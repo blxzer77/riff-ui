@@ -23,6 +23,18 @@ pub(crate) fn tabular_figures() -> FontFeatures {
     FontFeatures(Arc::new(vec![("tnum".into(), 1)]))
 }
 
+pub(crate) fn format_grouped(n: u64) -> String {
+    let digits = n.to_string();
+    let mut out = String::with_capacity(digits.len() + digits.len() / 3);
+    for (i, ch) in digits.chars().rev().enumerate() {
+        if i > 0 && i % 3 == 0 {
+            out.push(',');
+        }
+        out.push(ch);
+    }
+    out.chars().rev().collect()
+}
+
 /// How a control variant paints its box.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) enum Fill {

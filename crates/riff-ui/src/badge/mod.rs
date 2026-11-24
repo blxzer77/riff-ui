@@ -215,22 +215,10 @@ fn format_count(count: i64, max: i64) -> SharedString {
     let n = count.max(0) as u64;
     let top = max.max(0) as u64;
     if n > top {
-        format!("{}+", format_grouped(top)).into()
+        format!("{}+", paint::format_grouped(top)).into()
     } else {
-        format_grouped(n).into()
+        paint::format_grouped(n).into()
     }
-}
-
-fn format_grouped(n: u64) -> String {
-    let digits = n.to_string();
-    let mut out = String::with_capacity(digits.len() + digits.len() / 3);
-    for (i, ch) in digits.chars().rev().enumerate() {
-        if i > 0 && i % 3 == 0 {
-            out.push(',');
-        }
-        out.push(ch);
-    }
-    out.chars().rev().collect()
 }
 
 impl RenderOnce for Badge {
