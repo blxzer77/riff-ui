@@ -93,6 +93,8 @@ pub struct Button {
     on_click: Option<ClickHandler>,
     forced: ButtonState,
     frozen_at: Option<Duration>,
+    full_width: bool,
+    surface_override: Option<Hsla>,
 }
 
 impl Button {
@@ -110,7 +112,19 @@ impl Button {
             on_click: None,
             forced: ButtonState::default(),
             frozen_at: None,
+            full_width: false,
+            surface_override: None,
         }
+    }
+
+    pub(crate) fn full_width(mut self, full: bool) -> Self {
+        self.full_width = full;
+        self
+    }
+
+    pub(crate) fn surface_override(mut self, surface: Option<Hsla>) -> Self {
+        self.surface_override = surface;
+        self
     }
 
     pub fn variant(mut self, variant: ButtonVariant) -> Self {
@@ -305,7 +319,10 @@ impl RenderOnce for Button {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let theme = RiffTheme::global(cx).clone();
         let content = Content::new(&self, &theme, window);
-        let look = Look::of(self.variant, &theme);
+        let mut look = Look::of(self.variant, &theme);
+        if let Some(bg) = self.surface_override {
+            look.fill = crate::paint::Fill::Solid(bg);
+        }
         let reduce_motion = cx.reduce_motion();
 
         let shared = window
@@ -397,6 +414,9 @@ impl RenderOnce for Button {
             icon: self.icon.clone(),
             icon_right: self.icon_right.clone(),
             motion,
+            shared: shared.clone(),
+            label_text: self.label.clone(),
+            font_family: theme.font_family.clone(),
         };
 
         let on_click = self.on_click.clone();
@@ -408,39 +428,50 @@ impl RenderOnce for Button {
         let button = base::Button::new(self.id.clone())
             .track_focus(&focus)
             .disabled(self.disabled)
-            .block_mouse_except_scroll()
-            .flex_none()
-            .w(width)
-            .h(painter.content.metrics.height)
-            .opacity(opacity)
-            .cursor(if interactive {
-                CursorStyle::PointingHand
-            } else {
-                CursorStyle::Arrow
-            })
-            .on_hover(move |hovered, window, _| {
-                hover_state.set_hovered(*hovered);
-                window.refresh();
-            })
-            .on_mouse_down(MouseButton::Left, move |_, window, _| {
-                press_state.set_pressed(true);
-                window.refresh();
-            })
-            .child(
-                canvas(
-                    |_, _, _| {},
-                    move |bounds, (), window, cx| {
-                        // Releasing anywhere ends the press, as `:active` does.
-                        window.on_mouse_event(move |_: &MouseUpEvent, _, window, _| {
-                            if release_state.set_pressed(false) {
-                                window.refresh();
-                            }
-                        });
-                        painter.paint(bounds, window, cx);
-                    },
-                )
-                .size_full(),
-            );
+            .block_mouse_except_scroll();
+        let button = if self.full_width {
+            button.w_full().min_w_0()
+        } else {
+            button.flex_none().w(width).max_w_full()
+        }
+        .h(painter.content.metrics.height)
+        .opacity(opacity)
+        .cursor(if interactive {
+            CursorStyle::PointingHand
+        } else {
+            CursorStyle::Arrow
+        })
+        .on_hover(move |hovered, window, _| {
+            hover_state.set_hovered(*hovered);
+            window.refresh();
+        })
+        .on_mouse_down(MouseButton::Left, move |_, window, _| {
+            press_state.set_pressed(true);
+            window.refresh();
+        })
+        .child(
+            canvas(
+                |_, _, _| {},
+                move |bounds, (), window, cx| {
+                    // Releasing anywhere ends the press, as `:active` does.
+                    window.on_mouse_event(move |_: &MouseUpEvent, _, window, _| {
+                        if release_state.set_pressed(false) {
+                            window.refresh();
+                        }
+                    });
+                    painter.paint(bounds, window, cx);
+                },
+            )
+            .size_full(),
+        );
+        let tip_id = self.id.clone();
+        let tip_label = self.label.clone();
+        let truncated = shared.truncated();
+        let tip = crate::tooltip::Tooltip::new((tip_id, "riff-tip"))
+            .content(tip_label.unwrap_or_default())
+            .disabled(!truncated)
+            .prepare(window, cx);
+
         let button = match self.accessibility_label.or(self.label) {
             Some(label) => button.accessibility_label(label),
             None => button,
@@ -456,7 +487,8 @@ impl RenderOnce for Button {
 
         // Render the base button here so the busy flag lands on the node its
         // root writes; the Component wrapper writes none of its own.
-        a11y::Busy::new(button.render(window, cx).into_element(), self.loading)
+        let busy = a11y::Busy::new(button.render(window, cx).into_element(), self.loading);
+        tip.wrap_element(busy)
     }
 }
 
@@ -524,11 +556,24 @@ struct Painter {
     icon: Option<ButtonIcon>,
     icon_right: Option<ButtonIcon>,
     motion: Motion,
+    shared: state::Shared,
+    label_text: Option<SharedString>,
+    font_family: SharedString,
 }
 
 impl Painter {
     fn paint(self, bounds: Bounds<Pixels>, window: &mut Window, cx: &mut App) {
         let m = self.content.metrics;
+        let icons = usize::from(self.icon.is_some()) + usize::from(self.icon_right.is_some());
+        let parts = icons + usize::from(self.content.label.is_some());
+        let fixed_w =
+            m.padding_x * 2. + m.icon * icons as f32 + m.gap * parts.saturating_sub(1) as f32;
+        let available = (bounds.size.width - fixed_w).max(px(0.));
+        let truncated =
+            self.content.label.is_some() && self.content.label_width > available + px(1.);
+        if self.shared.set_truncated(truncated) {
+            window.defer(cx, |window, _| window.refresh());
+        }
         let scale = Scale {
             center: bounds.center(),
             factor: self.scale,
@@ -574,15 +619,59 @@ impl Painter {
     ) {
         let m = self.content.metrics;
         let label_width = self.content.label_width;
-        let parts_width = {
-            let icons = usize::from(self.icon.is_some()) + usize::from(self.icon_right.is_some());
-            let parts = icons + usize::from(self.content.label.is_some());
-            label_width + m.icon * icons as f32 + m.gap * parts.saturating_sub(1) as f32
-        };
+        let icons = usize::from(self.icon.is_some()) + usize::from(self.icon_right.is_some());
+        let parts = icons + usize::from(self.content.label.is_some());
+        let fixed_w =
+            m.padding_x * 2. + m.icon * icons as f32 + m.gap * parts.saturating_sub(1) as f32;
+        let available = (bounds.size.width - fixed_w).max(px(0.));
+        let truncated = self.content.label.is_some() && label_width > available + px(1.);
+        let parts_width =
+            label_width + m.icon * icons as f32 + m.gap * parts.saturating_sub(1) as f32;
+        let middle = bounds.center().y;
+
+        if truncated {
+            let mut x = bounds.left() + m.padding_x;
+            if let Some(icon) = &self.icon {
+                let slot = Bounds::new(point(x, middle - m.icon / 2.), size(m.icon, m.icon));
+                self.paint_icon_slot(
+                    slot,
+                    icon,
+                    self.motion.spinning,
+                    self.motion.icon_in,
+                    text,
+                    scale,
+                    window,
+                    cx,
+                );
+                x += m.icon + m.gap;
+            }
+
+            if let Some(raw) = &self.label_text {
+                let ellipsized =
+                    ellipsize_label(raw, available, m.font_size, &self.font_family, window);
+                self.paint_label(&ellipsized, x, middle, text, scale, window);
+            }
+
+            if let Some(icon) = &self.icon_right {
+                let rx = bounds.right() - m.padding_x - m.icon;
+                let slot = Bounds::new(point(rx, middle - m.icon / 2.), size(m.icon, m.icon));
+                self.paint_icon_slot(
+                    slot,
+                    icon,
+                    false,
+                    self.motion.icon_right_in,
+                    text,
+                    scale,
+                    window,
+                    cx,
+                );
+            }
+            return;
+        }
+
         // Centered, as `justify-content: center` does when the box is wider
         // or narrower (mid-glide) than its content.
         let mut x = bounds.center().x - parts_width / 2.;
-        let middle = bounds.center().y;
 
         if let Some(icon) = &self.icon {
             let slot = Bounds::new(point(x, middle - m.icon / 2.), size(m.icon, m.icon));
@@ -723,4 +812,45 @@ impl Painter {
             );
         }
     }
+}
+
+fn ellipsize_label(
+    text: &SharedString,
+    available: Pixels,
+    font_size: Pixels,
+    font_family: &SharedString,
+    window: &mut Window,
+) -> ShapedLine {
+    let shape = |candidate: SharedString| {
+        let mut f = font(font_family.clone());
+        f.weight = FontWeight::MEDIUM;
+        let run = TextRun {
+            len: candidate.len(),
+            font: f,
+            color: Hsla::black(),
+            ..Default::default()
+        };
+        window
+            .text_system()
+            .shape_line(candidate, font_size, &[run], None)
+    };
+
+    let full = shape(text.clone());
+    if full.width <= available {
+        return full;
+    }
+
+    for (idx, _) in text.char_indices().rev() {
+        let trimmed = text[..idx].trim_end();
+        if trimmed.is_empty() {
+            continue;
+        }
+        let candidate = SharedString::from(format!("{trimmed}…"));
+        let shaped = shape(candidate);
+        if shaped.width <= available {
+            return shaped;
+        }
+    }
+
+    shape(SharedString::from("…"))
 }

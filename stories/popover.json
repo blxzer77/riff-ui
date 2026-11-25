@@ -1,0 +1,79 @@
+{
+  "slug": "popover",
+  "name": "Popover",
+  "category": "Overlays",
+  "description": "A small floating card attached to its trigger — a title and quiet line, any content, flips to stay on screen, closes on a press outside or Escape and hands the focus back",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "sides",
+      "title": "Sides",
+      "rows": [
+        {
+          "id": "directions",
+          "title": "bottom / top / left / right",
+          "cells": [
+            { "id": "bottom", "props": { "side": "bottom", "title": "Details", "body": "Below the trigger", "triggerLabel": "Anchor", "stageWidth": 210, "stageHeight": 134 } },
+            { "id": "top", "props": { "side": "top", "title": "Details", "body": "Above the trigger", "triggerLabel": "Anchor", "stageWidth": 210, "stageHeight": 134 } },
+            { "id": "left", "props": { "side": "left", "title": "Details", "body": "To the left", "triggerLabel": "Open", "stageWidth": 260, "stageHeight": 110 } },
+            { "id": "right", "props": { "side": "right", "title": "Details", "body": "To the right", "triggerLabel": "Open", "stageWidth": 260, "stageHeight": 110 } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alignment",
+      "title": "Alignment",
+      "rows": [
+        {
+          "id": "along-bottom",
+          "title": "along bottom (start / center / end)",
+          "props": { "side": "bottom", "title": "Share link", "body": "Anyone with the link.", "triggerLabel": "Workspace settings", "stageWidth": 220, "stageHeight": 136 },
+          "cells": "@align"
+        },
+        {
+          "id": "along-right",
+          "title": "along right (start / center / end)",
+          "props": { "side": "right", "body": "Aligned panel", "triggerLabel": "Target", "triggerHeight": 48, "stageWidth": 240, "stageHeight": 112 },
+          "cells": "@align"
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "title": "Header, width & variants",
+      "rows": [
+        {
+          "id": "headers",
+          "title": "title / description / body combinations",
+          "props": { "side": "bottom", "triggerLabel": "Open", "stageWidth": 240, "stageHeight": 160 },
+          "cells": [
+            { "id": "title-only", "props": { "title": "Unsaved changes" } },
+            { "id": "desc-only", "props": { "description": "Sync runs every 5 minutes." } },
+            { "id": "title-desc", "props": { "title": "Sync status", "description": "Last synced two minutes ago." } },
+            { "id": "full", "props": { "title": "Invite member", "description": "Send a workspace invite link.", "body": "Role: Editor (can edit and publish)" } },
+            { "id": "body-only", "props": { "body": "Plain content without header." } }
+          ]
+        },
+        {
+          "id": "widths-and-options",
+          "title": "width / 360px wrap / offset / unstyled",
+          "props": { "side": "bottom", "triggerLabel": "Open" },
+          "cells": [
+            { "id": "w-240", "props": { "width": 240, "title": "Fixed width", "body": "Explicit width=240 constrains the card cleanly.", "stageWidth": 264, "stageHeight": 168 } },
+            { "id": "max-360", "props": { "title": "Maximum 360px", "body": "By default a popover fits its content up to 360px so long descriptions wrap smoothly without stretching across the screen.", "stageWidth": 384, "stageHeight": 180 } },
+            { "id": "offset-12", "props": { "offset": 12, "body": "Offset 12px", "stageWidth": 180, "stageHeight": 118 } },
+            { "id": "unstyled", "props": { "unstyled": true, "body": "Custom surface", "stageWidth": 180, "stageHeight": 100 } }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "align": [
+      { "id": "start", "props": { "align": "start" } },
+      { "id": "center", "props": { "align": "center" } },
+      { "id": "end", "props": { "align": "end" } }
+    ]
+  }
+}

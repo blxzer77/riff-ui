@@ -1,0 +1,82 @@
+{
+  "slug": "context-menu",
+  "name": "Context Menu",
+  "category": "Navigation",
+  "description": "The menu a right-click opens right at the pointer — Shift+F10 from keyboard focus, dynamic items, icons, descriptions, shortcuts, checks and submenus",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "surfaces",
+      "title": "Pointer-anchored context menus",
+      "rows": [
+        {
+          "id": "layouts",
+          "title": "title & shortcuts / icons & submenus / choices & disabled / descriptions & width",
+          "cells": [
+            {
+              "id": "pointer-actions",
+              "props": {
+                "title": "File actions",
+                "offsetX": 24,
+                "offsetY": 24,
+                "stageWidth": 230,
+                "stageHeight": 220,
+                "items": [
+                  { "label": "Open", "icon": "eye", "shortcut": "⌘O" },
+                  { "label": "Copy link", "icon": "link" },
+                  { "label": "Duplicate", "icon": "copy", "shortcut": "⌘D" },
+                  { "label": "Delete file", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            },
+            {
+              "id": "icons-submenu",
+              "props": {
+                "offsetX": 24,
+                "offsetY": 24,
+                "stageWidth": 220,
+                "stageHeight": 190,
+                "items": [
+                  { "label": "Rename", "icon": "pencil" },
+                  { "label": "Move to", "icon": "folder", "hasSubmenu": true },
+                  { "label": "Share", "icon": "share" },
+                  { "label": "Delete", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            },
+            {
+              "id": "choices-disabled",
+              "props": {
+                "title": "View",
+                "offsetX": 24,
+                "offsetY": 24,
+                "stageWidth": 220,
+                "stageHeight": 220,
+                "items": [
+                  { "label": "Grid", "checked": true, "type": "radio" },
+                  { "label": "List", "checked": false, "type": "radio" },
+                  { "label": "Show hidden", "checked": true, "type": "checkbox", "divider": true },
+                  { "label": "Export disabled", "icon": "file", "disabled": true, "divider": true }
+                ]
+              }
+            },
+            {
+              "id": "descriptions-width",
+              "props": {
+                "width": 240,
+                "offsetX": 20,
+                "offsetY": 20,
+                "stageWidth": 280,
+                "stageHeight": 170,
+                "items": [
+                  { "label": "Inspect node", "description": "View JSON metadata", "icon": "eye", "shortcut": "I" },
+                  { "label": "Remove node", "description": "Clears selected frame", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

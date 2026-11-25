@@ -35,6 +35,7 @@ struct Inner {
     focus: FocusHandle,
     hovered: bool,
     pressed: bool,
+    truncated: bool,
     parts: [Option<Part>; 3],
     loading_since: Option<Instant>,
     /// The content keys and width target of the previous render.
@@ -51,6 +52,7 @@ impl Shared {
                 focus,
                 hovered: false,
                 pressed: false,
+                truncated: false,
                 parts: [None, None, None],
                 loading_since: None,
                 last: None,
@@ -76,6 +78,10 @@ impl Shared {
         self.0.borrow().pressed
     }
 
+    pub fn truncated(&self) -> bool {
+        self.0.borrow().truncated
+    }
+
     pub fn set_hovered(&self, hovered: bool) {
         self.0.borrow_mut().hovered = hovered;
     }
@@ -85,6 +91,14 @@ impl Shared {
         let mut inner = self.0.borrow_mut();
         let changed = inner.pressed != pressed;
         inner.pressed = pressed;
+        changed
+    }
+
+    /// Returns whether the truncation state changed.
+    pub fn set_truncated(&self, truncated: bool) -> bool {
+        let mut inner = self.0.borrow_mut();
+        let changed = inner.truncated != truncated;
+        inner.truncated = truncated;
         changed
     }
 

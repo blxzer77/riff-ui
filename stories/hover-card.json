@@ -1,0 +1,95 @@
+{
+  "slug": "hover-card",
+  "name": "Hover Card",
+  "category": "Overlays",
+  "description": "A preview of what a link or name points to — opens after hovering or keyboard focusing the trigger, keeps open through the pointer corridor, never on touch",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "sides",
+      "title": "Sides",
+      "rows": [
+        {
+          "id": "directions",
+          "title": "bottom / top / left / right",
+          "cells": [
+            { "id": "bottom", "props": { "side": "bottom", "title": "Alice Lin", "meta": "Staff engineer", "triggerLabel": "@alice", "stageWidth": 210, "stageHeight": 134 } },
+            { "id": "top", "props": { "side": "top", "title": "Alice Lin", "meta": "Above the link", "triggerLabel": "@alice", "stageWidth": 210, "stageHeight": 134 } },
+            { "id": "left", "props": { "side": "left", "title": "Bob Chen", "meta": "To the left", "triggerLabel": "@bob", "stageWidth": 250, "stageHeight": 112 } },
+            { "id": "right", "props": { "side": "right", "title": "Bob Chen", "meta": "To the right", "triggerLabel": "@bob", "stageWidth": 250, "stageHeight": 112 } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alignment",
+      "title": "Alignment",
+      "rows": [
+        {
+          "id": "along-bottom",
+          "title": "along bottom (start / center / end)",
+          "props": { "side": "bottom", "title": "agent-worker-04", "meta": "Running · 14m ago", "triggerLabel": "agent-worker-04", "stageWidth": 220, "stageHeight": 136 },
+          "cells": "@align"
+        },
+        {
+          "id": "along-right",
+          "title": "along right (start / center / end)",
+          "props": { "side": "right", "meta": "Aligned preview card", "triggerLabel": "@ref", "triggerHeight": 46, "stageWidth": 240, "stageHeight": 112 },
+          "cells": "@align"
+        }
+      ]
+    },
+    {
+      "id": "sizing",
+      "title": "Rich preview, width & offset",
+      "rows": [
+        {
+          "id": "sizes-and-layouts",
+          "title": "width / 320px wrap / offset",
+          "cells": [
+            {
+              "id": "rich-288",
+              "props": {
+                "width": 288,
+                "triggerLabel": "@alice",
+                "title": "Alice Lin",
+                "handle": "@alice",
+                "meta": "Builds UI infrastructure and desktop tooling.",
+                "linkLabel": "Open profile",
+                "stageWidth": 312,
+                "stageHeight": 176
+              }
+            },
+            {
+              "id": "max-320",
+              "props": {
+                "triggerLabel": "riff-uiux",
+                "title": "Repository summary",
+                "meta": "By default HoverCard fits its content up to 320px wide and wraps cleanly across lines without stretching.",
+                "stageWidth": 344,
+                "stageHeight": 172
+              }
+            },
+            {
+              "id": "offset-14",
+              "props": {
+                "offset": 14,
+                "triggerLabel": "Hover link",
+                "meta": "Offset 14px",
+                "stageWidth": 190,
+                "stageHeight": 116
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "align": [
+      { "id": "start", "props": { "align": "start" } },
+      { "id": "center", "props": { "align": "center" } },
+      { "id": "end", "props": { "align": "end" } }
+    ]
+  }
+}

@@ -308,6 +308,86 @@ fn press_scale_eases_over_160ms(cx: &mut TestAppContext) {
     assert_eq!(last_scale(cx), PRESSED_SCALE);
 }
 
+#[gpui_kit::test]
+fn truncated_label_shows_full_text_tooltip_on_hover(cx: &mut TestAppContext) {
+    use gpui_kit::base::Root;
+    use gpui_kit::test::TestQueryExt as _;
+    use gpui_kit::{AppContext as _, Role, TestSupportExt as _};
+
+    struct TruncHarness;
+    impl Render for TruncHarness {
+        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+            div()
+                .size_full()
+                .p_12()
+                .flex()
+                .gap_4()
+                .child(
+                    div()
+                        .id("narrow-wrap")
+                        .w(px(72.))
+                        .test_support()
+                        .child(Button::new("trunc").label("Generate quarterly report")),
+                )
+                .child(
+                    div()
+                        .id("wide-wrap")
+                        .test_support()
+                        .child(Button::new("short").label("Save")),
+                )
+        }
+    }
+
+    cx.update(crate::init);
+    let (_, cx) = cx.add_window_view(|window, cx| {
+        let view = cx.new(|_| TruncHarness);
+        Root::new(view, window, cx)
+    });
+    cx.run_until_parked();
+
+    let (trunc_bounds, short_bounds) = cx.update(|window, _| {
+        let all = window.find_all_by_role(Role::Button);
+        let trunc = all
+            .iter()
+            .find(|el| el.label() == Some("Generate quarterly report"))
+            .expect("truncated button")
+            .bounds();
+        let short = all
+            .iter()
+            .find(|el| el.label() == Some("Save"))
+            .expect("short button")
+            .bounds();
+        (trunc, short)
+    });
+
+    assert!(
+        trunc_bounds.size.width <= px(72.5),
+        "narrow button should be constrained"
+    );
+
+    // Hover truncated button for 500ms -> shows full label tooltip.
+    cx.simulate_mouse_move(trunc_bounds.center(), None, Modifiers::default());
+    cx.executor().advance_clock(Duration::from_millis(500));
+    cx.run_until_parked();
+    let has_trunc_tip = cx.update(|window, _| {
+        window
+            .find_all_by_role(Role::Tooltip)
+            .into_iter()
+            .any(|el| el.label() == Some("Generate quarterly report"))
+    });
+    assert!(
+        has_trunc_tip,
+        "truncated button must show full-text tooltip on hover"
+    );
+
+    // Moving to untruncated button closes previous and opens no tooltip.
+    cx.simulate_mouse_move(short_bounds.center(), None, Modifiers::default());
+    cx.executor().advance_clock(Duration::from_millis(500));
+    cx.run_until_parked();
+    let tip_count = cx.update(|window, _| window.find_all_by_role(Role::Tooltip).len());
+    assert_eq!(tip_count, 0, "untruncated button must not show tooltip");
+}
+
 fn last_scale(cx: &mut VisualTestContext) -> f32 {
     redraw(cx);
     LAST_SCALE.with(Cell::get)

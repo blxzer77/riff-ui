@@ -14,8 +14,8 @@ mod tests;
 use std::rc::Rc;
 use std::time::Duration;
 
+use crate::tooltip::Tooltip;
 use gpui_kit::base::{self, Easing, Transition, transition};
-use gpui_kit::component::tooltip::Tooltip;
 use gpui_kit::{
     A11ySubtreeBuilder, App, Bounds, BoxShadow, ClickEvent, CursorStyle, Element, ElementId,
     FocusHandle, GlobalElementId, Hsla, InspectorElementId, InteractiveElement, IntoElement,
@@ -315,13 +315,14 @@ impl RenderOnce for IconButton {
             if let Some(label) = label {
                 el = el.accessibility_label(label);
             }
-            if let Some(tip) = tooltip {
-                el = el.tooltip(move |window, cx| Tooltip::new(tip.clone()).build(window, cx));
-            }
             el
         };
 
-        match self.pressed {
+        let tip_id = self.id.clone();
+        let tip = Tooltip::new((tip_id, "riff-tip"))
+            .content(tooltip.unwrap_or_default())
+            .prepare(window, cx);
+        let control = match self.pressed {
             Some(pressed) => {
                 let mut toggle = base::Toggle::new(self.id).pressed(pressed);
                 let on_change = self.on_change;
@@ -351,7 +352,9 @@ impl RenderOnce for IconButton {
                     AnyHost::Toggle(_) => unreachable!(),
                 }
             }
-        }
+        };
+
+        tip.wrap_element(control)
     }
 }
 
@@ -576,13 +579,6 @@ impl AnyHost {
         match self {
             Self::Button(b) => Self::Button(Box::new(b.child(child))),
             Self::Toggle(t) => Self::Toggle(Box::new(t.child(child))),
-        }
-    }
-
-    fn tooltip(self, build: impl Fn(&mut Window, &mut App) -> gpui_kit::AnyView + 'static) -> Self {
-        match self {
-            Self::Button(b) => Self::Button(Box::new(b.tooltip(build))),
-            Self::Toggle(t) => Self::Toggle(Box::new(t.tooltip(build))),
         }
     }
 }

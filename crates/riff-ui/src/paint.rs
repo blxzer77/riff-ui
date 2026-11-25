@@ -14,9 +14,11 @@ use std::f32::consts::PI;
 use std::sync::Arc;
 
 use gpui_kit::{
-    App, Background, BorderStyle, Bounds, BoxShadow, ContentMask, Corners, Edges, FontFeatures,
-    Hsla, PathBuilder, Pixels, Point, Radians, Rgba, ShapedLine, SharedString, Size,
-    TransformationMatrix, Window, linear_color_stop, linear_gradient, point, px, quad, size,
+    AnyElement, App, Background, BorderStyle, Bounds, BoxShadow, ContentMask, Corners, Edges,
+    FontFeatures, FontWeight, Hsla, IntoElement as _, ParentElement as _, PathBuilder, Pixels,
+    Point, Radians, Rgba, ShapedLine, SharedString, Size, Styled as _, TextRun,
+    TransformationMatrix, Window, canvas, div, font, linear_color_stop, linear_gradient, point, px,
+    quad, size,
 };
 
 pub(crate) fn tabular_figures() -> FontFeatures {
@@ -736,6 +738,77 @@ pub(crate) fn paint_text(
         taps,
         window,
     );
+}
+
+/// Shapes and renders single-line text with explicit CSS `letter-spacing` and
+/// browser half-up baseline snapping.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn tracked_text_el(
+    text: impl Into<SharedString>,
+    font_family: SharedString,
+    font_size: Pixels,
+    line_height: Pixels,
+    weight: FontWeight,
+    letter_spacing: Pixels,
+    color: Hsla,
+    window: &mut Window,
+) -> AnyElement {
+    let text: SharedString = text.into();
+    let mut f = font(font_family);
+    f.weight = weight;
+    let run = TextRun {
+        len: text.len(),
+        font: f,
+        color,
+        ..Default::default()
+    };
+    let line = window
+        .text_system()
+        .shape_line(text, font_size, &[run], None);
+    let glyph_count: usize = line.runs.iter().map(|r| r.glyphs.len()).sum();
+    let total_w = (line.width + letter_spacing * glyph_count as f32).max(px(0.));
+    let line_rc = std::sync::Arc::new(line);
+
+    div()
+        .flex_none()
+        .w(total_w)
+        .h(line_height)
+        .child(
+            canvas(
+                |_, _, _| {},
+                move |bounds, (), window, _| {
+                    let ascent = line_rc.ascent.round();
+                    let descent = line_rc.descent.round();
+                    let box_h = ascent + descent;
+                    let baseline = bounds.top() + (bounds.size.height - box_h) * 0.5 + ascent;
+                    let sf = window.scale_factor();
+                    let snapped = px((baseline.as_f32() * sf + 0.5).floor() / sf);
+                    let origin = point(bounds.left(), snapped);
+                    let mut idx = 0usize;
+                    for run in &line_rc.runs {
+                        for glyph in &run.glyphs {
+                            let pos = origin
+                                + glyph.position
+                                + point(tracked_offset(letter_spacing, idx), px(0.));
+                            if glyph.is_emoji {
+                                let _ = window.paint_emoji(pos, run.font_id, glyph.id, font_size);
+                            } else {
+                                let _ = window.paint_glyph(
+                                    pos,
+                                    run.font_id,
+                                    glyph.id,
+                                    font_size,
+                                    color,
+                                );
+                            }
+                            idx += 1;
+                        }
+                    }
+                },
+            )
+            .size_full(),
+        )
+        .into_any_element()
 }
 
 /// Paints the glyphs of `line` that fall into a horizontal band, for the

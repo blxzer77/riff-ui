@@ -1,0 +1,96 @@
+{
+  "slug": "tooltip",
+  "name": "Tooltip",
+  "category": "Overlays",
+  "description": "A small inverted label for one control — shows on hover after a short wait and at once under keyboard focus, neighbors follow instantly, optional shortcut chip inside, flips to stay on screen",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "sides",
+      "title": "Sides",
+      "rows": [
+        {
+          "id": "directions",
+          "title": "top / bottom / left / right",
+          "cells": [
+            { "id": "top", "props": { "side": "top", "content": "Above trigger", "triggerLabel": "Hover", "stageWidth": 160, "stageHeight": 84 } },
+            { "id": "bottom", "props": { "side": "bottom", "content": "Below trigger", "triggerLabel": "Hover", "stageWidth": 160, "stageHeight": 84 } },
+            { "id": "left", "props": { "side": "left", "content": "Left", "triggerLabel": "Hover", "stageWidth": 176, "stageHeight": 48 } },
+            { "id": "right", "props": { "side": "right", "content": "Right", "triggerLabel": "Hover", "stageWidth": 176, "stageHeight": 48 } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alignment",
+      "title": "Alignment",
+      "rows": [
+        {
+          "id": "along-top",
+          "title": "along top (start / center / end)",
+          "props": { "side": "top", "content": "Bold", "triggerLabel": "Formatting actions", "stageWidth": 180, "stageHeight": 84 },
+          "cells": "@align"
+        },
+        {
+          "id": "along-right",
+          "title": "along right (start / center / end)",
+          "props": { "side": "right", "content": "Search", "trigger": "icon-button", "triggerIcon": "search", "triggerSize": "md", "triggerLabel": "Search", "stageWidth": 176, "stageHeight": 60 },
+          "cells": "@align"
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "title": "Content & triggers",
+      "rows": [
+        {
+          "id": "shortcuts",
+          "title": "shortcut chip",
+          "props": { "side": "top", "stageWidth": 196, "stageHeight": 84 },
+          "cells": [
+            { "id": "save", "props": { "content": "Save", "shortcut": "⌘S", "triggerLabel": "Save" } },
+            { "id": "palette", "props": { "content": "Command palette", "shortcut": "⌘K", "triggerLabel": "Commands" } },
+            { "id": "back", "props": { "content": "Go back", "shortcut": "⌘[", "triggerLabel": "Back" } },
+            { "id": "inspect", "props": { "content": "Inspect", "shortcut": "⌥⌘I", "triggerLabel": "Inspect" } }
+          ]
+        },
+        {
+          "id": "wrapping",
+          "title": "max-width 240px wrap",
+          "props": { "side": "top" },
+          "cells": [
+            { "id": "long-text", "props": { "content": "Removes every cached artifact from the local build directory without touching remote releases", "triggerLabel": "Clean cache", "stageWidth": 260, "stageHeight": 144 } },
+            { "id": "long-shortcut", "props": { "content": "Save all open editors in the current workspace", "shortcut": "⌥⌘S", "triggerLabel": "Save all", "stageWidth": 260, "stageHeight": 112 } }
+          ]
+        },
+        {
+          "id": "offsets",
+          "title": "offset (2 / 6 / 12)",
+          "props": { "side": "top", "content": "Offset", "triggerLabel": "Target", "stageWidth": 160, "stageHeight": 92 },
+          "cells": [
+            { "id": "tight", "props": { "offset": 2 } },
+            { "id": "default", "props": { "offset": 6 } },
+            { "id": "airy", "props": { "offset": 12 } }
+          ]
+        },
+        {
+          "id": "triggers",
+          "title": "button / icon-button",
+          "props": { "side": "top", "stageWidth": 160, "stageHeight": 84 },
+          "cells": [
+            { "id": "button", "props": { "trigger": "button", "triggerLabel": "Share", "content": "Copy share link" } },
+            { "id": "icon-md", "props": { "trigger": "icon-button", "triggerIcon": "bookmark", "triggerSize": "md", "triggerLabel": "Bookmark", "content": "Bookmark", "shortcut": "⌘D" } },
+            { "id": "icon-sm", "props": { "trigger": "icon-button", "triggerIcon": "plus", "triggerSize": "sm", "triggerLabel": "New item", "content": "New item", "shortcut": "N" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "align": [
+      { "id": "start", "props": { "align": "start" } },
+      { "id": "center", "props": { "align": "center" } },
+      { "id": "end", "props": { "align": "end" } }
+    ]
+  }
+}

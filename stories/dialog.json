@@ -1,0 +1,137 @@
+{
+  "slug": "dialog",
+  "name": "Dialog",
+  "category": "Feedback",
+  "description": "A modal window on a dimmed backdrop — gray outer tray and inner white card, pinned header and footer, Escape & backdrop dismissal, Tab focus trap, and AlertDialog",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "sizes",
+      "title": "Sizes & layouts",
+      "rows": [
+        {
+          "id": "presets",
+          "title": "sm (400) / md (480) / lg (720)",
+          "cells": [
+            {
+              "id": "sm",
+              "props": {
+                "size": "sm",
+                "title": "Credits",
+                "description": "Model usage and quota details.",
+                "body": "A run costs what its model reads and writes. Longer runs cost a little more.",
+                "stageWidth": 450,
+                "stageHeight": 230
+              }
+            },
+            {
+              "id": "md",
+              "props": {
+                "size": "md",
+                "title": "Edit agent",
+                "description": "Changes apply from its next run.",
+                "body": "Set the agent name, instructions and model defaults.",
+                "footerCancel": "Cancel",
+                "footerConfirm": "Save",
+                "stageWidth": 540,
+                "stageHeight": 260
+              }
+            },
+            {
+              "id": "lg",
+              "props": {
+                "size": "lg",
+                "title": "Workspace settings",
+                "description": "Shared environment configuration.",
+                "body": "Large modal width (720px) provides space for multi-column settings and long previews.",
+                "footerCancel": "Discard",
+                "footerConfirm": "Save changes",
+                "stageWidth": 780,
+                "stageHeight": 250
+              }
+            }
+          ]
+        },
+        {
+          "id": "variants",
+          "title": "width 340 / head only / no close button",
+          "cells": [
+            {
+              "id": "head-only",
+              "props": {
+                "width": 340,
+                "title": "Sync complete",
+                "description": "All 14 files are up to date.",
+                "stageWidth": 390,
+                "stageHeight": 160
+              }
+            },
+            {
+              "id": "no-close",
+              "props": {
+                "width": 340,
+                "closeButton": false,
+                "title": "Preparing export",
+                "description": "Bundling workspace history.",
+                "body": "Please keep this window open until finished.",
+                "stageWidth": 390,
+                "stageHeight": 190
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alert",
+      "title": "AlertDialog",
+      "rows": [
+        {
+          "id": "confirmations",
+          "title": "primary / danger / with extra body",
+          "cells": [
+            {
+              "id": "alert-primary",
+              "props": {
+                "alert": true,
+                "title": "Apply schema update?",
+                "description": "Updates project metadata to the latest format.",
+                "cancelLabel": "Cancel",
+                "confirmLabel": "Apply",
+                "stageWidth": 450,
+                "stageHeight": 210
+              }
+            },
+            {
+              "id": "alert-danger",
+              "props": {
+                "alert": true,
+                "danger": true,
+                "title": "Cancel subscription?",
+                "description": "You keep Pro until March 14, then the workspace moves to Free.",
+                "cancelLabel": "Keep plan",
+                "confirmLabel": "Cancel subscription",
+                "stageWidth": 450,
+                "stageHeight": 230
+              }
+            },
+            {
+              "id": "alert-with-body",
+              "props": {
+                "alert": true,
+                "danger": true,
+                "title": "Delete project?",
+                "description": "This action cannot be undone.",
+                "body": "12 active schedules and saved logs will be permanently removed.",
+                "cancelLabel": "Cancel",
+                "confirmLabel": "Delete project",
+                "stageWidth": 450,
+                "stageHeight": 260
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

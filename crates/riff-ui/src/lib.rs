@@ -5,14 +5,23 @@ pub mod avatar;
 pub mod badge;
 pub mod button;
 pub mod card;
+pub mod command_menu;
+pub mod context_menu;
+pub mod dialog;
+pub mod dropdown_menu;
 pub mod gradient_text;
+pub mod hover_card;
 pub mod icon_button;
 pub mod kbd;
+mod menu;
+mod overlay;
 pub(crate) mod paint;
+pub mod popover;
 pub mod separator;
 pub mod skeleton;
 pub mod spinner;
 pub mod theme;
+pub mod tooltip;
 
 use std::borrow::Cow;
 

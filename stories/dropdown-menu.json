@@ -1,0 +1,165 @@
+{
+  "slug": "dropdown-menu",
+  "name": "Dropdown Menu",
+  "category": "Navigation",
+  "description": "Actions and choices behind any trigger — icons, descriptions, shortcuts, checks, red items and submenus, gliding highlight and menu keyboard",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "placement",
+      "title": "Sides & alignment",
+      "rows": [
+        {
+          "id": "directions",
+          "title": "bottom / top × start / end",
+          "props": {
+            "title": "Actions",
+            "triggerLabel": "Workspace actions",
+            "stageWidth": 220,
+            "stageHeight": 190,
+            "items": [
+              { "label": "Rerun", "icon": "repeat", "shortcut": "⌘R" },
+              { "label": "Duplicate", "icon": "copy" },
+              { "label": "Delete run", "icon": "trash", "danger": true, "divider": true }
+            ]
+          },
+          "cells": [
+            { "id": "bottom-start", "props": { "side": "bottom", "align": "start" } },
+            { "id": "bottom-end", "props": { "side": "bottom", "align": "end" } },
+            { "id": "top-start", "props": { "side": "top", "align": "start" } },
+            { "id": "top-end", "props": { "side": "top", "align": "end" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "title": "Item rows",
+      "rows": [
+        {
+          "id": "rows",
+          "title": "icons / descriptions / checks / disabled",
+          "props": { "side": "bottom", "align": "start", "triggerLabel": "Menu" },
+          "cells": [
+            {
+              "id": "icons-shortcuts",
+              "props": {
+                "stageWidth": 240,
+                "stageHeight": 236,
+                "items": [
+                  { "label": "View details", "icon": "eye", "shortcut": "⌘O" },
+                  { "label": "Edit name", "icon": "pencil", "shortcut": "E" },
+                  { "label": "Share link", "icon": "share" },
+                  { "label": "Move to", "icon": "folder", "divider": true, "hasSubmenu": true },
+                  { "label": "Delete", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            },
+            {
+              "id": "descriptions",
+              "props": {
+                "width": 260,
+                "stageWidth": 284,
+                "stageHeight": 208,
+                "items": [
+                  { "label": "Quick preview", "description": "Opens side panel beside list", "icon": "eye" },
+                  { "label": "Export archive", "description": "Includes logs and artifacts", "icon": "file", "shortcut": "⌘E" },
+                  { "label": "Remove workspace", "description": "Cannot be undone", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            },
+            {
+              "id": "choices",
+              "props": {
+                "title": "Sort & layout",
+                "stageWidth": 220,
+                "stageHeight": 230,
+                "items": [
+                  { "label": "Newest first", "checked": true, "type": "radio" },
+                  { "label": "Name A–Z", "checked": false, "type": "radio" },
+                  { "label": "Show icons", "checked": true, "type": "checkbox", "divider": true },
+                  { "label": "Compact rows", "checked": false, "type": "checkbox" }
+                ]
+              }
+            },
+            {
+              "id": "disabled",
+              "props": {
+                "stageWidth": 220,
+                "stageHeight": 190,
+                "items": [
+                  { "label": "Open project", "icon": "folder" },
+                  { "label": "Archive locked", "icon": "settings", "disabled": true },
+                  { "label": "Delete", "icon": "trash", "danger": true, "divider": true }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "panel-options",
+      "title": "Header, width, truncation & empty",
+      "rows": [
+        {
+          "id": "options",
+          "title": "header / width 240 / 320px ellipsis / empty",
+          "props": { "side": "bottom", "align": "start", "triggerLabel": "Open" },
+          "cells": [
+            {
+              "id": "header",
+              "props": {
+                "headerTitle": "Alice Lin",
+                "headerMeta": "alice@riff.dev",
+                "title": "Workspace",
+                "stageWidth": 240,
+                "stageHeight": 230,
+                "items": [
+                  { "label": "Preferences", "icon": "settings" },
+                  { "label": "Theme", "icon": "sun", "hasSubmenu": true }
+                ]
+              }
+            },
+            {
+              "id": "width-240",
+              "props": {
+                "width": 240,
+                "stageWidth": 264,
+                "stageHeight": 156,
+                "items": [
+                  { "label": "Fixed 240px panel", "icon": "globe" },
+                  { "label": "Copy permalink", "icon": "link", "shortcut": "⌘L" }
+                ]
+              }
+            },
+            {
+              "id": "truncation",
+              "props": {
+                "stageWidth": 344,
+                "stageHeight": 168,
+                "items": [
+                  {
+                    "label": "A remarkably long action name that truncates at 320px cleanly",
+                    "description": "Even descriptions clip smoothly with an ellipsis instead of widening the card",
+                    "icon": "star",
+                    "shortcut": "⌘S"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "empty",
+              "props": {
+                "empty": "Nothing here yet",
+                "stageWidth": 210,
+                "stageHeight": 120,
+                "items": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,7 +13,6 @@
 
 | 事项 | 来源 | 处理 |
 | ---- | ---- | ---- |
-| button 文字被截断时，悬停显示全文 | button | 做完 tooltip 后补 |
 | `--riff-font-mono` / `--riff-mono` 未实现，用的是 gpui-component 的等宽字体 | theme | 做 code-block、kbd 时一并处理 |
 | 卡片阴影 `--riff-shadow-card` 紧贴底边那一行比原库深（225 对 237） | theme | 已查清：`paint_drop_shadows` 的 `cover_bounds` 在 1× 下把 `0.5px` spread 外扩成 1px（亮度翻倍）。`paint::drop_shadows` 已改用 `paint_band` 绘制实心环，`Card` 实测顶/底阴影与原库一致（231/220 对 232/222）；`tokens` 展示页仍用 `.shadow()` 未改 |
 | 按下状态的路径抗锯齿在显卡不支持 4× MSAA 时会降到 2× 或 1×，只在本机验证过 | button | 换机器时复查 |
@@ -35,10 +34,10 @@
 
 共用一套浮层定位和出入场动画，先定下这套写法。
 
-`tooltip`、`popover`、`hover-card`、`dropdown-menu`、`context-menu`、`dialog`、`command-menu`
+~~`tooltip`~~（已完成）、~~`popover`~~（已完成）、~~`hover-card`~~（已完成）、~~`dropdown-menu`~~（已完成）、~~`context-menu`~~（已完成）、~~`dialog`~~（已完成）、~~`command-menu`~~（已完成）
 
 - gpui-base 有 `tooltip`、`popover`、`hover_card`、`dialog`、`positioner`。
-- `tooltip` 做完回头补 button 的截断全文。
+- 阶段 2 的 7 个组件（`tooltip` 含 `overlay`/`icon_button`/`button` 联动、`popover`、`hover-card`、`dropdown-menu` 含共享 `menu` 引擎、`context-menu`、`dialog` 含 `AlertDialog`、`command-menu`）已全部完成；下一阶段进入阶段 3（表单）。
 
 ### 阶段 3：表单（约 20 个）
 

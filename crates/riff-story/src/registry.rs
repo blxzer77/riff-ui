@@ -59,12 +59,19 @@ pub fn entries() -> Vec<Entry> {
         entry!("badge", badge),
         entry!("button", button),
         entry!("card", card),
+        entry!("command-menu", command_menu),
+        entry!("context-menu", context_menu),
+        entry!("dialog", dialog),
+        entry!("dropdown-menu", dropdown_menu),
         entry!("gradient-text", gradient_text),
+        entry!("hover-card", hover_card),
         entry!("icon-button", icon_button),
         entry!("kbd", kbd),
+        entry!("popover", popover),
         entry!("separator", separator),
         entry!("skeleton", skeleton),
         entry!("spinner", spinner),
+        entry!("tooltip", tooltip),
     ]
 }
 

@@ -1,0 +1,112 @@
+{
+  "slug": "command-menu",
+  "name": "Command Menu",
+  "category": "Navigation",
+  "description": "Search and run anything from one field — tool actions with logos and Ctrl/⌘1–5, everyday commands with icons, assistant fallback, query highlights, and live footer feedback",
+  "freeze_ms": 500,
+  "sections": [
+    {
+      "id": "palette",
+      "title": "Default & responsive",
+      "rows": [
+        {
+          "id": "widths",
+          "title": "desktop (560) / narrow container (400 <= 480)",
+          "cells": [
+            {
+              "id": "desktop",
+              "props": {
+                "width": 560
+              }
+            },
+            {
+              "id": "narrow",
+              "props": {
+                "width": 400
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "states",
+      "title": "Search, assistant fallback, and run feedback",
+      "rows": [
+        {
+          "id": "interactions",
+          "title": "filtered highlight / assistant fallback / footer done / custom groups",
+          "cells": [
+            {
+              "id": "filtered",
+              "props": {
+                "width": 540,
+                "query": "doc"
+              }
+            },
+            {
+              "id": "assistant-only",
+              "props": {
+                "width": 540,
+                "query": "summarize sprint"
+              }
+            },
+            {
+              "id": "ran-feedback",
+              "props": {
+                "width": 540,
+                "selectedId": "task",
+                "clickLabel": "Create a task"
+              }
+            },
+            {
+              "id": "custom",
+              "props": {
+                "width": 540,
+                "placeholder": "Search workspace actions…",
+                "groups": [
+                  {
+                    "id": "suggestions",
+                    "label": "Quick actions",
+                    "commands": [
+                      {
+                        "id": "find",
+                        "label": "Search project files",
+                        "hint": "142 indexed files",
+                        "icon": "search"
+                      },
+                      {
+                        "id": "new-folder",
+                        "label": "Create workspace folder",
+                        "hint": "Shared drive",
+                        "icon": "folder"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "prefs",
+                    "label": "Workspace",
+                    "commands": [
+                      {
+                        "id": "prefs-open",
+                        "label": "Open preferences",
+                        "icon": "settings",
+                        "keys": ["G", "P"]
+                      },
+                      {
+                        "id": "add-member",
+                        "label": "Add collaborator",
+                        "icon": "plus",
+                        "keys": ["A"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
